@@ -12,7 +12,7 @@ class MyClass(object):
 
     def __init__(self, params):
         '''
-        Constructor
+        Constructor me cago en la puta
         '''
         #a ver que pasa acá, no pasa nada
         pass
