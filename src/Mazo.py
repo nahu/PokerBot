@@ -14,5 +14,5 @@ class MyClass(object):
         '''
         Constructor
         '''
-        #a ver que pasa ac·
+        #a ver que pasa ac√°, no pasa nada
         pass
