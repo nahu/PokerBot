@@ -1,18 +1,44 @@
 '''
-Created on 18/09/2011
+Creado el 23/09/2011
 
-@author: Nahuel
+@author: Nahuel Hernández
+@author: Javier Pérez
+@author: Carlos Bellino
+@author: Vanessa Jannete Cañete
+@author: Gabriela Gaona
 '''
 
-class MyClass(object):
+class Mazo(object):
     '''
-    classdocs
+    Clase que represente el mazo de cartas
+    
+    #TODO: completar toda el diccionario
+    
+    Configuren bien su editor a utf-8 para no tener problemas,
+    si usan Eclipse, Window->preferences->general->workspace->text file encoding
+    
+    A, 2, 3, 4, 5, 6, 7, 8, 9, J, Q, K
+    s = spades = picas
+    h = hearts = corazones
+    d = diamonds = diamantes
+    c = clubs = tréboles
     '''
-    pass
+    
+    nombre = {'As' : 'As de picas',
+              '2s' : 'Dos de picas',
+              
+              
+              'Jc' : 'Jack de tréboles',
+              'Qc' : 'Reina de tréboles',
+              'Kc' : 'Rey de tréboles'
+              }
 
-    def __init__(self, params):
+    def __init__(self, semilla):
         '''
         Constructor
+        la semilla es para la generación de números aleatorios
         '''
-        #a ver que pasa acá, no pasa nada
-        pass
+        self.semilla = semilla
+        
+    #TODO metodos de generacion de numeros aleatorios, mezclado, obtención de cartas, etc.
+    
