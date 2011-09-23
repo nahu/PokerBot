@@ -37,6 +37,7 @@ class Mazo(object):
         '''
         Constructor
         la semilla es para la generación de números aleatorios
+
         '''
         self.semilla = semilla
         
