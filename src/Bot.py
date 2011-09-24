@@ -6,20 +6,21 @@ Creado el 23/09/2011
 @author: Javier Pérez
 @author: Carlos Bellino
 @author: Vanessa Jannete Cañete
-@author: Gabriela linda
+@author: Gabriela Gaona
+
 '''
 
 import Jugador
 
 class Bot(Jugador):
     '''
-    El bot extiende de un jugador, redefine los m�todos del mismo
+    El bot extiende de un jugador, redefine los métodos del mismo
     '''
     
     def __init__(self, identificador, fichas, nombre = None, bot = False):
         '''
         Constructor del Bot
-        
+        hola
         modificacion de comentario
         '''
         pass
@@ -44,4 +45,11 @@ class Bot(Jugador):
         @rtype: String
         '''
         pass
+    
+    def mejor_en_mano(self, comunitarias):
+        total = self.cartas + comunitarias
+        total = total.sort()
+        mejor = "carta alta"
+        
+        
     
