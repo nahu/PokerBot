@@ -6,7 +6,7 @@ Creado el 23/09/2011
 @author: Javier Pérez
 @author: Carlos Bellino
 @author: Vanessa Jannete Cañete
-@author: Gabriela Gaona
+@author: Gobriela Gaona
 '''
 
 import Jugador
@@ -42,4 +42,11 @@ class Bot(Jugador):
         @rtype: String
         '''
         pass
+    
+    def mejor_en_mano(self, comunitarias):
+        total = self.cartas + comunitarias
+        total = total.sort()
+        mejor = "carta alta"
+        
+        
     
