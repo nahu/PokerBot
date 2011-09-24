@@ -19,6 +19,8 @@ class Bot(Jugador):
     def __init__(self, identificador, fichas, nombre = None, bot = False):
         '''
         Constructor del Bot
+        
+        modificacion de comentario
         '''
         pass
     
