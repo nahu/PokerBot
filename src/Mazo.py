@@ -17,7 +17,7 @@ class Mazo(object):
     Configuren bien su editor a utf-8 para no tener problemas,
     si usan Eclipse, Window->preferences->general->workspace->text file encoding
     
-    A, 2, 3, 4, 5, 6, 7, 8, 9, J, Q, K
+    A, 2, 3, 4, 5, 6, 7, 8, 9, D, J, Q, K
     s = spades = picas
     h = hearts = corazones
     d = diamonds = diamantes
