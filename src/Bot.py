@@ -6,7 +6,7 @@ Creado el 23/09/2011
 @author: Javier Pérez
 @author: Carlos Bellino
 @author: Vanessa Jannete Cañete
-@author: Gobriela Gaona
+@author: Gabriela Gaona
 '''
 
 #import Jugador
