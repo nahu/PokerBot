@@ -198,7 +198,7 @@ class Bot():
             odds["doble par"]= (3/cartas_restantes[ronda])-1
             odds["par"]=0
         else: #no tiene par
-             odds["par"] = (6/cartas_restantes[ronda])-1
+            odds["par"] = (6/cartas_restantes[ronda])-1
              
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++  
         tipo, jugada = self.handEval.comprobar_doble_par(numero,colores)
@@ -236,12 +236,16 @@ class Bot():
         else:
             if self.handEval.posible_color(numero,colores):
                 odds["color"]= (9/cartas_restantes[ronda])-1
-                        
+        
+        #+++++++++++++++++++++++++++++++++++++++++++++++++++++++               
         tipo,jugada = self.handEval.comprobar_full(numero, colores)
         if tipo:
             odds["full"]=0
-            
-            
+        
+        #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        tipo, jugada = self.handEval.comprobar_poker(numero,colores)
+        if tipo:
+            odds["poker"]=0    
                     
             
                     
