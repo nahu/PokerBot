@@ -15,7 +15,7 @@ class Ronda(object):
     su jugada.
     '''
 
-    def __init__(self, tipo, nro_apuesta, ciega, pot, dealer):
+    def __init__(self, tipo, nro_apuesta, ciega, pot):
         '''
         Constructor
         @param tipo : para saber el tipo de ronda y las apuesta
@@ -30,7 +30,6 @@ class Ronda(object):
         self.nro_apuesta = nro_apuesta
         self.ciega = ciega
         self.pot = pot
-        self.dealer = dealer
     
     def apuesta_de_ronda(self):           
         return self.pot + (self.monto_a_subir() * self.nro_apuesta)
@@ -41,7 +40,7 @@ class Ronda(object):
         elif (self.tipo == 3 or self.tipo == 4):
             return self.ciega * 2
     
-    def monto_a_igualar(self):
+    def monto_a_igualar(self, dealer):
         if (self.tipo == 1 and self.dealer):
             return self.ciega/2
         else:

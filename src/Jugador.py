@@ -27,7 +27,12 @@ class Jugador(object):
         self.apuesta_actual = 0
         self.dealer = False
         
-        
+    def verificar_allin(self, apuesta):
+        if (apuesta > self.fichas):
+            return True
+        else:
+            return False
+            
     def obtener_jugada(self, ronda, comunitarias):
         '''
         Dependiendo de la ronda hace lo que tiene que hacer
