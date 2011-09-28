@@ -8,11 +8,11 @@ Creado el 23/09/2011
 @author: Vanessa Jannete Cañete
 @author: Gabriela Gaona
 '''
-import Mazo.Mazo
-import Jugador.Jugador
-import Cerebro.Cerebro
-import HandEvaluator.HandEvaluator
-import Ronda.Ronda
+import Mazo
+import Jugador
+import Cerebro
+import HandEvaluator
+import Ronda
 
 class Mesa(object):
     '''
@@ -40,6 +40,7 @@ class Mesa(object):
         self.nro_jugadores = 2
         self.jugador_actual = 0
         self.allin = False
+        self.paso = 0
         
     def juego(self):
         '''
@@ -49,53 +50,74 @@ class Mesa(object):
         del jugador que ganó esta iteración del juego y la 
         tercera posición indica el nombre de la jugada 
         ganadora.
-        '''         
-            
+        '''
+        self.poner_ciegas()
+        self.jugador_actual = self.dealer
+        
         for tipo in range(1,5): #iterador de rondas
-            self.ronda(tipo)
-            
-    
+            self.croupier(tipo) #acciones del croupier, repartir manos y colocar comunitarias
+            if not self.allin:
+                resultado_ronda = self.ronda(tipo)
+                if resultado_ronda == "fin_juego":
+                    break
+                
+            self.jugador_actual = self.obtener_no_dealer()#después del pre-flop el que juega primero es el que no es dealer
+        
+        self.dealer = self.obtener_no_dealer()
+        
+        return self.evaluar_ganador()
+        
+    def evaluar_ganador(self):
+        #self.hand_eval.evaluar(jugador1, jugador2) obtiene el nombre de la jugada ganadora y el ganador
+        #verificar si termina el juego
+        #armar la lista resultado de self.juego()
+        pass    
     
     def ronda(self, tipo_ronda):
-        if tipo_ronda == 1: #pre-flop, juega primero el dealer, tiene la ciega chica
-            self.poner_ciegas()
-            self.croupier(tipo_ronda) #acciones del croupier
-            
-            for nro_apuesta in range(0, 4):
-                for i in range(0, self.nro_jugadores):
-                    if not self.allin:
-                        ronda = Ronda(tipo_ronda, nro_apuesta, self.ciega, self.bote)
-                        nro_jugador = self.siguiente_jugador()
-                        jugada = self.jugadores[nro_jugador].obtener_jugada(ronda, self.comunitarias)
-                        self.actualizar_mesa(jugada, nro_apuesta, self.jugadores[nro_jugador].dealer)
-                '''
+        #retorna si se continúa o no con la siguiente ronda
+        resultado = "continuar"
+        for nro_apuesta in range(0, 4):
+            for i in range(0, self.nro_jugadores):
                 if not self.allin:
                     ronda = Ronda(tipo_ronda, nro_apuesta, self.ciega, self.bote)
-                    jugada = self.jugadores[self.dealer].obtener_jugada(ronda, self.comunitarias)
-                    self.actualizar_mesa(jugada, nro_apuesta, self.jugadores[self.dealer])
-                    if not self.allin:
-                        jugada = self.jugadores[self.obtener_no_dealer()].obtener_jugada(ronda, self.comunitarias)
-                        self.actualizar_mesa(jugada, nro_apuesta, self.jugadores[self.dealer])
-                '''
-        
-        elif tipo_ronda == 2:#flop, juega primero el que no es dealer.
+                    self.ronda_actual = ronda
+                    jugada = self.jugadores[self.jugador_actual].obtener_jugada(ronda, self.comunitarias)
+                    resultado = self.evaluar_accion(jugada, nro_apuesta, self.jugadores[self.jugador_actual])
+                    if resultado != "continuar":
+                        break
 
-        elif tipo_ronda == 3:#turn, juega primero el que no es dealer.
-            self.croupier(tipo_ronda)
-            
-        elif tipo_ronda == 4:#river, juega primero el que no es dealer.
-            self.croupier(tipo_ronda) 
+                self.siguiente_jugador()
+            if resultado != "continuar" or self.allin:
+                break
+                
+        return resultado
     
-    def actualizar_mesa(self, jugada, nro_apuesta, dealer):
-        if jugada == "apostar":
+    
+    def evaluar_accion(self, jugada, nro_apuesta, jugador): 
+        #se calcula que se debe hacer a partir de lo que devuelve el jugador actual
+        #(acciones posibles devueltas son "apostar", "igualar" o "no_ir"
+        #retorna true si terminó la ronda, false
+        if jugada == "no_ir":
+            self.no_ir(jugador)
+            return "fin_juego"
+        elif jugada == "igualar":
+            return "fin_ronda"
+        elif jugada == "apostar":
+            return "continuar"
+        
+            
+            
+    def no_ir(self, jugador):
+        ganador = self.jugadores[self.obtener_contrario(jugador.dealer)]
+        ganador.fichas += self.bote
+        
+        
             
     def siguiente_jugador(self):
-        retorno = self.jugador_actual
         if self.jugador_actual == self.dealer:
             self.jugador_actual =  self.obtener_no_dealer()
         else:
             self.jugador_actual = self.dealer
-        return retorno
           
     def poner_ciegas(self):
         self.bote = 0
@@ -126,7 +148,13 @@ class Mesa(object):
             return 1
         else:
             return 0  
-                
+    
+    def obtener_contrario(self, dealer):
+        if dealer:
+            return self.dealer
+        else:
+            return self.obtener_no_dealer()
+                   
     def croupier(self, tipo_ronda):
         if tipo_ronda == 1: #pre-flop, repartir dos cartas a cada jugador
             self.mazo.mezclar()

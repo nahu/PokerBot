@@ -11,7 +11,7 @@ Creado el 23/09/2011
 
 
 import Jugador
-from copy import deepcopy
+import Cerebro
 
 
 class Bot(Jugador):
@@ -24,7 +24,7 @@ class Bot(Jugador):
         Constructor del Bot
 
         '''
-        pass
+        self.cerebro = Cerebro()
     
     def obtener_jugada(self, ronda, comunitarias):
         '''
