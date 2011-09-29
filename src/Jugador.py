@@ -65,4 +65,31 @@ class Jugador(object):
         self.jugada = jugada
         self.esperar = False
         
+    def completar_ciega(self, ciega):
+        self.apuesta_actual +=ciega/2
+        self.fichas -= ciega/2
+    
+    def subir_apuesta(self, monto):
+        if (self.fichas > monto):
+            self.fichas -= monto
+            self.apuesta_actual += monto
+            return (monto, False)
+        else:
+            apuesta=self.fichas
+            self.apuesta_actua += apuesta
+            self.fichas = 0
+            return (apuesta, True)
+        
+    def igualar(self, total):
+        monto = total-self.apuesta_actual
+        if (self.fichas > monto):
+            self.fichas -= monto
+            self.apuesta_actual += monto
+            return (monto, False)
+        else:
+            apuesta = self.fichas
+            self.apuesta_actua += apuesta
+            self.fichas = 0
+            return (apuesta, True)
+        
         
