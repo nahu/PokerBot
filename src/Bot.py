@@ -20,12 +20,15 @@ class Bot(Jugador):
     El bot extiende de un jugador, redefine los métodos del mismo
     '''
     
-    def __init__(self, identificador, fichas, nombre = None, bot = False):
+    def __init__(self, identificador, fichas, nombre):
         '''
         Constructor del Bot
-
         '''
+
         self.handEval = HandEvaluator()
+        self.bot = True
+        self.nombre = nombre
+        self.fichas = fichas
         self.cerebro = Cerebro()
     
     def obtener_jugada(self, ronda, comunitarias):
@@ -47,9 +50,9 @@ class Bot(Jugador):
         el contrario se retirarse puede mostrar o no mostrar las cartas)]
         @rtype: String
         '''
-        pass           
+        return "igualar"
+         
     
-        #odd[i][1]
     def calcular_odds(self, ronda, comunitarias):
         
         cartas_restantes = [50, 47, 46, 45]
