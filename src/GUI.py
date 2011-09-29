@@ -358,7 +358,7 @@ def main():
     ''' Instancia Grupo de Sprites'''
     all_sprites=pygame.sprite.RenderUpdates()
 
-    """sprites = [
+    sprites = [
         mazo, 
         ficha_dealer, 
         mesa.pozo, 
@@ -389,48 +389,48 @@ def main():
     
         
     all_sprites.add(sprites)
-    """    
-
         
-    '''Ficha Deales y Mazo'''
-    all_sprites.add(mazo)
-    all_sprites.add(ficha_dealer)
 
-    '''Texto de Pozo, Creditos y Apuestas'''
-    all_sprites.add(mesa.pozo)
-    
-    all_sprites.add(jugador1.credito_jug)
-    all_sprites.add(jugador2.credito_jug)
-    
-    all_sprites.add(jugador1.apuesta_jug)
-    all_sprites.add(jugador2.apuesta_jug)
-    
-    '''Cartas Comunitarias'''
-    all_sprites.add(mesa.carta1)
-    all_sprites.add(mesa.carta2)
-    all_sprites.add(mesa.carta3)
-    all_sprites.add(mesa.carta4)
-    all_sprites.add(mesa.carta5)
-    
-    '''Cartas de Jugadores'''
-    all_sprites.add(jugador1.get_cartas()[0])
-    all_sprites.add(jugador1.get_cartas()[1])
-    all_sprites.add(jugador2.get_cartas()[0])
-    all_sprites.add(jugador2.get_cartas()[1])
-        
-    '''Botones de Jugadores'''
-    all_sprites.add(jugador1.get_boton("aceptar"))
-    all_sprites.add(jugador1.get_boton("apostar"))
-    all_sprites.add(jugador1.get_boton("pasar"))
-    all_sprites.add(jugador1.get_boton("retirar"))
-    all_sprites.add(jugador1.get_boton("subir_apuesta"))
-    
-    all_sprites.add(jugador2.get_boton("aceptar"))
-    all_sprites.add(jugador2.get_boton("apostar"))
-    all_sprites.add(jugador2.get_boton("pasar"))
-    all_sprites.add(jugador2.get_boton("retirar")) 
-    all_sprites.add(jugador2.get_boton("subir_apuesta")) 
-    
+#        
+#    '''Ficha Deales y Mazo'''
+#    all_sprites.add(mazo)
+#    all_sprites.add(ficha_dealer)
+#
+#    '''Texto de Pozo, Creditos y Apuestas'''
+#    all_sprites.add(mesa.pozo)
+#    
+#    all_sprites.add(jugador1.credito_jug)
+#    all_sprites.add(jugador2.credito_jug)
+#    
+#    all_sprites.add(jugador1.apuesta_jug)
+#    all_sprites.add(jugador2.apuesta_jug)
+#    
+#    '''Cartas Comunitarias'''
+#    all_sprites.add(mesa.carta1)
+#    all_sprites.add(mesa.carta2)
+#    all_sprites.add(mesa.carta3)
+#    all_sprites.add(mesa.carta4)
+#    all_sprites.add(mesa.carta5)
+#    
+#    '''Cartas de Jugadores'''
+#    all_sprites.add(jugador1.get_cartas()[0])
+#    all_sprites.add(jugador1.get_cartas()[1])
+#    all_sprites.add(jugador2.get_cartas()[0])
+#    all_sprites.add(jugador2.get_cartas()[1])
+#        
+#    '''Botones de Jugadores'''
+#    all_sprites.add(jugador1.get_boton("aceptar"))
+#    all_sprites.add(jugador1.get_boton("apostar"))
+#    all_sprites.add(jugador1.get_boton("pasar"))
+#    all_sprites.add(jugador1.get_boton("retirar"))
+#    all_sprites.add(jugador1.get_boton("subir_apuesta"))
+#    
+#    all_sprites.add(jugador2.get_boton("aceptar"))
+#    all_sprites.add(jugador2.get_boton("apostar"))
+#    all_sprites.add(jugador2.get_boton("pasar"))
+#    all_sprites.add(jugador2.get_boton("retirar")) 
+#    all_sprites.add(jugador2.get_boton("subir_apuesta")) 
+#    
     
     ## Set de variables
     jugador1.turno = True
