@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Creado el Sep 25, 2011
 
@@ -165,7 +166,7 @@ class Cerebro(object):
                 if len(odd): #se tiene algo en los odds  
                     for i in odd:
                         if odd[i][1] <= 5: 
-                            if odd[i][0] == 0:#se tiene un juego formado y es bueno
+                            if odd[i][0] == 0 and dict_odd[odd[i][2]][1]:#se tiene un juego formado y es bueno y lo que se tiene no esta en mesa
                                 return 'apostar'
                             else:
                                 
@@ -181,7 +182,7 @@ class Cerebro(object):
                                     return "no_ir"
                         
                         elif odd[i][1] == 6 or odd[i][1] == 7:#trío o escalera
-                            if odd[i][1] == 0:#se tiene ese juego
+                            if odd[i][1] == 0 and dict_odd[odd[i][2]][1]:#se tiene ese juego
                                 if ronda.nro_apuesta <= 2:
                                     return "apostar"
                                 else:
@@ -208,7 +209,7 @@ class Cerebro(object):
         buenos_odds = []
         for i in dict_odd.keys():
             if dict_odd[i]:
-                buenos_odds.append([dict_odd[i], JUEGOS[i], i])
+                buenos_odds.append([dict_odd[i][0], JUEGOS[i], i])
         buenos_odds.sort()
         return buenos_odds        
         

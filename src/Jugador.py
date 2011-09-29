@@ -15,7 +15,7 @@ class Jugador(object):
     '''
 
 
-    def __init__(self, identificador, fichas, nombre = None, bot = False, lock):
+    def __init__(self, identificador, fichas, nombre, lock = None):
         '''
         Constructor, se definen todos los atributos para la clase Jugador
         '''
@@ -23,7 +23,7 @@ class Jugador(object):
         self.id = identificador
         self.nombre = nombre
         self.mano = [None, None]
-        self.bot = bot
+        self.bot = False
         self.apuesta_actual = 0
         self.dealer = False
         self.lock = lock
@@ -64,5 +64,8 @@ class Jugador(object):
     def definir_jugada(self, jugada):
         self.jugada = jugada
         self.esperar = False
+        
+    def dibujar_botones(self):
+        return self.esperar
         
         
