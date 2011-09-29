@@ -20,7 +20,7 @@ class Bot(Jugador):
     El bot extiende de un jugador, redefine los métodos del mismo
     '''
     
-    def __init__(self, identificador, fichas, nombre):
+    def __init__(self, identificador, fichas, nombre, p = 0.5):
         '''
         Constructor del Bot
         '''
@@ -29,14 +29,15 @@ class Bot(Jugador):
         self.bot = True
         self.nombre = nombre
         self.fichas = fichas
-        self.cerebro = Cerebro()
         self.id = identificador
         self.mano = [None, None]
         self.apuesta_actual = 0
         self.dealer = False
         self.jugada = None
         self.esperar = False
-    
+        estrategia = self.establecer_estrategia(p)
+        self.cerebro = Cerebro(estrategia[0], estrategia[1])
+        
     def obtener_jugada(self, ronda, comunitarias):
         '''
         Dependiendo de la ronda hace lo que tiene que hacer
