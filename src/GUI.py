@@ -5,15 +5,18 @@
 import os, sys, pygame 
 from pygame.locals import * 
 import threading  
+import Jugador
+import Mesa
 
 # Constantes
 WIDTH = 1084
 HEIGHT = 600
 
-MONTO = 10000
+FICHAS1 = 10000
+FICHAS2 = 10000
 CIEGA = 100
 
-# Clases rgtyrt
+# Clases 
 # ---------------------------------------------------------------------
 lock_dibujar = threading.Lock()
 lock_jugador = threading.Lock()
@@ -333,12 +336,21 @@ def main():
     background_image = pygame.transform.scale(background_image, (WIDTH,HEIGHT))
     
     '''Instancias'''
+
+    jug1 = Jugador(1,FICHAS1, "Pibe", False, lock_jugador)
+    jug2 = Jugador(2,FICHAS2, "PC",True)
+    mesa_nahu = Mesa(ciega=CIEGA, jugadores=[jug1, jug2])
+    
+    hilo = Thread(mesa_nahu)
+    
+    hilo.start()
+     
     mesa = MesaGUI()
     mazo = Carta("b", WIDTH/4, HEIGHT/2)
     ficha_dealer = Dealer()
 
-    jugador1 = JugadorGUI(1500,"humano","1c","1d",0, "abajo")
-    jugador2 = JugadorGUI(2000,"humano","1h","1s",0, "arriba")
+    jugador1 = JugadorGUI(FICHAS1,"humano","b","b",0, "abajo")
+    jugador2 = JugadorGUI(FICHAS2,"cpu","b","b",0, "arriba")
     
     jugador1.dealer=True                                    #DEBUG
     cambiar_dealer(jugador1, jugador2, ficha_dealer)
@@ -346,7 +358,7 @@ def main():
     ''' Instancia Grupo de Sprites'''
     all_sprites=pygame.sprite.RenderUpdates()
 
-    sprites = [
+    """sprites = [
         mazo, 
         ficha_dealer, 
         mesa.pozo, 
@@ -367,17 +379,19 @@ def main():
         jugador1.get_boton("apostar"), 
         jugador1.get_boton("pasar"), 
         jugador1.get_boton("retirar"), 
-        #jugador1.get_boton("subir_apuesta"), 
+        jugador1.get_boton("subir_apuesta"), 
         jugador2.get_boton("aceptar"), 
         jugador2.get_boton("apostar"), 
         jugador2.get_boton("pasar"), 
         jugador2.get_boton("retirar"), 
-        #jugador2.get_boton("subir_apuesta")
+        jugador2.get_boton("subir_apuesta")
         ]
+    
         
-    all_sprites.add(sprites)    
-
+    all_sprites.add(sprites)
     """    
+
+        
     '''Ficha Deales y Mazo'''
     all_sprites.add(mazo)
     all_sprites.add(ficha_dealer)
@@ -416,7 +430,7 @@ def main():
     all_sprites.add(jugador2.get_boton("pasar"))
     all_sprites.add(jugador2.get_boton("retirar")) 
     all_sprites.add(jugador2.get_boton("subir_apuesta")) 
-    """
+    
     
     ## Set de variables
     jugador1.turno = True
@@ -486,8 +500,6 @@ def main():
                     
                     if (jugador2.get_boton("apostar").rect.collidepoint((mX,mY)) and jugador2.turno ):
                         bandera2 = True
-                        #jugador2.apostar()
-                        #all_sprites.remove(jugador2.get_boton("apostar"))
                         obtenerju = 'apostar'
                         jug2 =  'jug2'
                         
