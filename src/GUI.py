@@ -337,8 +337,8 @@ def main():
     
     '''Instancias'''
 
-    jug1 = Jugador(1,FICHAS1, "Pibe", False, lock_jugador)
-    jug2 = Jugador(2,FICHAS2, "PC",True)
+    jug1 = Jugador(1,FICHAS1, "Pibe",  lock_jugador)
+    jug2 = Jugador(2,FICHAS2, "PC")
     mesa_nahu = Mesa(ciega=CIEGA, jugadores=[jug1, jug2])
     
     hilo = Thread(mesa_nahu)

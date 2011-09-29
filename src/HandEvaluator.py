@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Creado el 24/09/2011
 
