@@ -4,7 +4,8 @@
 # Módulos
 import os, sys, pygame 
 from pygame.locals import * 
- 
+import threading  
+
 # Constantes
 WIDTH = 1084
 HEIGHT = 600
@@ -14,7 +15,28 @@ CIEGA = 100
 
 # Clases
 # ---------------------------------------------------------------------
-
+lock_dibujar = threading.Lock()
+lock_jugador = threading.Lock()
+  
+class Thread(threading.Thread):  
+    def __init__(self, mesa):
+        threading.Thread.__init__(self)  
+        self.mesa = mesa
+    
+    def run(self):
+        while True:
+            resultado = self.mesa.juego()
+            print "Ganó el jugador" + self.mesa.jugadores[resultado[1]]
+            print "Jugada ganadora: " + resultado[2]
+            
+            if not resultado[0]:#el juego terminó
+                break
+        
+    def dibujado(self):
+        self.mesa.set_dibujado()
+        
+    def unset_num(self):
+        self.num = 1
 
 class Carta(pygame.sprite.Sprite):    
     def __init__(self, card , px, py):
