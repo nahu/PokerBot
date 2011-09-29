@@ -12,7 +12,8 @@ Creado el 23/09/2011
 
 import Jugador
 import Cerebro
-
+import HandEvaluator
+import random
 
 class Bot(Jugador):
     '''
@@ -23,10 +24,20 @@ class Bot(Jugador):
         '''
         Constructor del Bot
         '''
+
+        self.handEval = HandEvaluator()
         self.bot = True
         self.nombre = nombre
         self.fichas = fichas
         self.cerebro = Cerebro()
+        self.fichas = fichas
+        self.id = identificador
+        self.mano = [None, None]
+        self.bot = True
+        self.apuesta_actual = 0
+        self.dealer = False
+        self.jugada = None
+        self.esperar = False
     
     def obtener_jugada(self, ronda, comunitarias):
         '''
@@ -45,12 +56,20 @@ class Bot(Jugador):
         si es un bot se calcula.
         [ir(igualar), no_ir, aumentar, all_in, salir, pasar, mostrar, no_mostrar (en caso de ganar porque
         el contrario se retirarse puede mostrar o no mostrar las cartas)]
+        
+        
         @rtype: String
         '''
-        return "igualar"
+        
+        ''' return Cerebro().elegir_accion(mano, comunitarias, ronda, dict_odds, dealer)
+        dealer: true o false si es que soy o no dealer
+        '''
+        
+        return Cerebro().elegir_accion(self.mano, comunitarias, ronda, self.calcular_odds, self.dealer)
          
     
     def calcular_odds(self, ronda, comunitarias):
+        
         cartas_restantes = [50, 47, 46, 45]
         odds={"carta alta":[None,True],"par":[None,True], "doble par":[None,True], "trio":[None,True], "escalera interna":[None,True], "escalera abierta":[None,True], 
               "color":[None, True], "full":[None,True], "poker":[None,True]}
@@ -202,5 +221,27 @@ class Bot(Jugador):
             return True
         return False
         
-        
+    def establecer_estrategia(self,numero):
+        aleatorio = random.random()
+        if numero < 0.9:
+            limite_superior = numero + 0.1
+        else:
+            limite_superior = 1
+        if numero > 0.1:
+            limite_inferior = numero - 0.1
+        else:
+            limite_inferior = 0
+        if limite_superior < 1:
+            rango_mentira = 1 - limite_superior
+        else:
+            rango_mentira = 0
+        if aleatorio < limite_inferior:
+            return (2,0)
+        if aleatorio >= limite_inferior and aleatorio <= limite_superior:
+            return (3,random.randint(1,4))
+        rango_mentira = rango_mentira / 4
+        for i in range(1,5):
+            if aleatorio <= limite_superior + rango_mentira*i:
+                return (1,i)
+         
     
