@@ -5,22 +5,25 @@
 import os, sys, pygame 
 from pygame.locals import * 
 import threading  
+import Jugador
+import Mesa
 
 # Constantes
 WIDTH = 1084
 HEIGHT = 600
 
-MONTO = 10000
+FICHAS1 = 10000
+FICHAS2 = 10000
 CIEGA = 100
 
-# Clases
+# Clases 
 # ---------------------------------------------------------------------
 lock_dibujar = threading.Lock()
 lock_jugador = threading.Lock()
   
 class Thread(threading.Thread):  
     def __init__(self, mesa):
-        threading.Thread.__init__(self)  
+        threading.Thread.__init__(self)
         self.mesa = mesa
     
     def run(self):
@@ -35,8 +38,13 @@ class Thread(threading.Thread):
     def dibujado(self):
         self.mesa.set_dibujado()
         
-    def unset_num(self):
-        self.num = 1
+    def mostrar_boton(self):
+        return self.mesa.jugadores[self.mesa.jugador_actual].dibujar_botones()
+    
+    def establecer_jugada(self, jugada):
+        self.mesa.jugadores[self.jugador_actual].definir_jugada(jugada)
+        
+        
 
 class Carta(pygame.sprite.Sprite):    
     def __init__(self, card , px, py):
@@ -104,10 +112,10 @@ class Boton(pygame.sprite.Sprite):
         self.rect.centery = py
         self.activo = False
     
-    def set_activo():
+    def set_activo(self):
         self.activo = True
     
-    def set_inactivo():
+    def set_inactivo(self):
         self.activo = False
     
 class JugadorGUI():    
@@ -328,12 +336,21 @@ def main():
     background_image = pygame.transform.scale(background_image, (WIDTH,HEIGHT))
     
     '''Instancias'''
+
+    jug1 = Jugador(1,FICHAS1, "Pibe",  lock_jugador)
+    jug2 = Jugador(2,FICHAS2, "PC")
+    mesa_nahu = Mesa(ciega=CIEGA, jugadores=[jug1, jug2])
+    
+    hilo = Thread(mesa_nahu)
+    
+    hilo.start()
+     
     mesa = MesaGUI()
     mazo = Carta("b", WIDTH/4, HEIGHT/2)
     ficha_dealer = Dealer()
 
-    jugador1 = JugadorGUI(1500,"humano","1c","1d",0, "abajo")
-    jugador2 = JugadorGUI(2000,"humano","1h","1s",0, "arriba")
+    jugador1 = JugadorGUI(FICHAS1,"humano","b","b",0, "abajo")
+    jugador2 = JugadorGUI(FICHAS2,"cpu","b","b",0, "arriba")
     
     jugador1.dealer=True                                    #DEBUG
     cambiar_dealer(jugador1, jugador2, ficha_dealer)
@@ -362,56 +379,58 @@ def main():
         jugador1.get_boton("apostar"), 
         jugador1.get_boton("pasar"), 
         jugador1.get_boton("retirar"), 
-        #jugador1.get_boton("subir_apuesta"), 
+        jugador1.get_boton("subir_apuesta"), 
         jugador2.get_boton("aceptar"), 
         jugador2.get_boton("apostar"), 
         jugador2.get_boton("pasar"), 
         jugador2.get_boton("retirar"), 
-        #jugador2.get_boton("subir_apuesta")
+        jugador2.get_boton("subir_apuesta")
         ]
+    
         
-    all_sprites.add(sprites)    
-
-    """    
-    '''Ficha Deales y Mazo'''
-    all_sprites.add(mazo)
-    all_sprites.add(ficha_dealer)
-
-    '''Texto de Pozo, Creditos y Apuestas'''
-    all_sprites.add(mesa.pozo)
-    
-    all_sprites.add(jugador1.credito_jug)
-    all_sprites.add(jugador2.credito_jug)
-    
-    all_sprites.add(jugador1.apuesta_jug)
-    all_sprites.add(jugador2.apuesta_jug)
-    
-    '''Cartas Comunitarias'''
-    all_sprites.add(mesa.carta1)
-    all_sprites.add(mesa.carta2)
-    all_sprites.add(mesa.carta3)
-    all_sprites.add(mesa.carta4)
-    all_sprites.add(mesa.carta5)
-    
-    '''Cartas de Jugadores'''
-    all_sprites.add(jugador1.get_cartas()[0])
-    all_sprites.add(jugador1.get_cartas()[1])
-    all_sprites.add(jugador2.get_cartas()[0])
-    all_sprites.add(jugador2.get_cartas()[1])
+    all_sprites.add(sprites)
         
-    '''Botones de Jugadores'''
-    all_sprites.add(jugador1.get_boton("aceptar"))
-    all_sprites.add(jugador1.get_boton("apostar"))
-    all_sprites.add(jugador1.get_boton("pasar"))
-    all_sprites.add(jugador1.get_boton("retirar"))
-    all_sprites.add(jugador1.get_boton("subir_apuesta"))
-    
-    all_sprites.add(jugador2.get_boton("aceptar"))
-    all_sprites.add(jugador2.get_boton("apostar"))
-    all_sprites.add(jugador2.get_boton("pasar"))
-    all_sprites.add(jugador2.get_boton("retirar")) 
-    all_sprites.add(jugador2.get_boton("subir_apuesta")) 
-    """
+
+#        
+#    '''Ficha Deales y Mazo'''
+#    all_sprites.add(mazo)
+#    all_sprites.add(ficha_dealer)
+#
+#    '''Texto de Pozo, Creditos y Apuestas'''
+#    all_sprites.add(mesa.pozo)
+#    
+#    all_sprites.add(jugador1.credito_jug)
+#    all_sprites.add(jugador2.credito_jug)
+#    
+#    all_sprites.add(jugador1.apuesta_jug)
+#    all_sprites.add(jugador2.apuesta_jug)
+#    
+#    '''Cartas Comunitarias'''
+#    all_sprites.add(mesa.carta1)
+#    all_sprites.add(mesa.carta2)
+#    all_sprites.add(mesa.carta3)
+#    all_sprites.add(mesa.carta4)
+#    all_sprites.add(mesa.carta5)
+#    
+#    '''Cartas de Jugadores'''
+#    all_sprites.add(jugador1.get_cartas()[0])
+#    all_sprites.add(jugador1.get_cartas()[1])
+#    all_sprites.add(jugador2.get_cartas()[0])
+#    all_sprites.add(jugador2.get_cartas()[1])
+#        
+#    '''Botones de Jugadores'''
+#    all_sprites.add(jugador1.get_boton("aceptar"))
+#    all_sprites.add(jugador1.get_boton("apostar"))
+#    all_sprites.add(jugador1.get_boton("pasar"))
+#    all_sprites.add(jugador1.get_boton("retirar"))
+#    all_sprites.add(jugador1.get_boton("subir_apuesta"))
+#    
+#    all_sprites.add(jugador2.get_boton("aceptar"))
+#    all_sprites.add(jugador2.get_boton("apostar"))
+#    all_sprites.add(jugador2.get_boton("pasar"))
+#    all_sprites.add(jugador2.get_boton("retirar")) 
+#    all_sprites.add(jugador2.get_boton("subir_apuesta")) 
+#    
     
     ## Set de variables
     jugador1.turno = True
@@ -481,8 +500,6 @@ def main():
                     
                     if (jugador2.get_boton("apostar").rect.collidepoint((mX,mY)) and jugador2.turno ):
                         bandera2 = True
-                        #jugador2.apostar()
-                        #all_sprites.remove(jugador2.get_boton("apostar"))
                         obtenerju = 'apostar'
                         jug2 =  'jug2'
                         
