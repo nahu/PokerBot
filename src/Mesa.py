@@ -39,6 +39,7 @@ class Mesa(object):
         self.jugador_actual = 0
         self.allin = False
         self.dibujar = False
+        self.resultado = None #si es distinto de None, tiene el resultado del juego
         self.lock = lock
     
     def set_dibujar(self):
@@ -86,31 +87,33 @@ class Mesa(object):
         
     def evaluar_ganador(self):
         #self.hand_eval.evaluar(jugador1, jugador2) obtiene el nombre de la jugada ganadora y el ganador
-        #verificar si termina el juego
+        #car si termina el juego
         #armar la lista resultado de self.juego()
         pass    
     
     def ronda(self, tipo_ronda):
         #retorna si se continúa o no con la siguiente ronda
         resultado = "continuar"
-        for nro_apuesta in range(0, 4):
+        self.ronda_actual = Ronda(tipo_ronda, 1, self.ciega, self.bote)
+        
+        while True:
             for i in range(0, self.nro_jugadores):
                 if not self.allin:
-                    ronda = Ronda(tipo_ronda, nro_apuesta, self.ciega, self.bote)
-                    self.ronda_actual = ronda
-                    jugada = self.jugadores[self.jugador_actual].obtener_jugada(ronda, self.comunitarias)
-                    resultado = self.evaluar_accion(jugada, nro_apuesta, self.jugadores[self.jugador_actual])
+                    self.ronda_actual.pot = self.bote
+                    jugada = self.jugadores[self.jugador_actual].obtener_jugada(self.ronda_actual, self.comunitarias)
+                    resultado = self.evaluar_accion(jugada, self.jugadores[self.jugador_actual])
                     if resultado != "continuar":
                         break
 
                 self.siguiente_jugador()
+                
             if resultado != "continuar" or self.allin:
                 break
                 
         return resultado
     
     
-    def evaluar_accion(self, jugada, nro_apuesta, jugador): 
+    def evaluar_accion(self, jugada, jugador): 
         #se calcula que se debe hacer a partir de lo que devuelve el jugador actual
         #(acciones posibles devueltas son "apostar", "igualar" o "no_ir"
         #retorna true si terminó la ronda, false

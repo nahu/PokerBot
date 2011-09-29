@@ -27,6 +27,11 @@ class Bot(Jugador):
         self.nombre = nombre
         self.fichas = fichas
         self.cerebro = Cerebro()
+        self.id = identificador
+        self.mano = [None, None]
+        self.apuesta_actual = 0
+        self.dealer = False
+        self.esperar = False
     
     def obtener_jugada(self, ronda, comunitarias):
         '''
@@ -43,8 +48,7 @@ class Bot(Jugador):
         @return jugada : devuelve lo que tiene que hacer
         si es un jugador se obtiene de la pantalla
         si es un bot se calcula.
-        [ir(igualar), no_ir, aumentar, all_in, salir, pasar, mostrar, no_mostrar (en caso de ganar porque
-        el contrario se retirarse puede mostrar o no mostrar las cartas)]
+
         @rtype: String
         '''
         return "igualar"
@@ -167,13 +171,7 @@ class Bot(Jugador):
         #comprobar poker
         tipo,jugada = self.handEval.comprobar_poker(numero,colores)
         if tipo:
-            odds["full"][1] = False
-        
-        
-        
-        
-        
-                  
+            odds["full"][1] = False               
                     
     def tiene_cartas_consecutivas(self):
         cartas={"1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "d":10, "j":11, "q":12, "k":13}
