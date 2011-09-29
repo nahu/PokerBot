@@ -13,7 +13,7 @@ Creado el 23/09/2011
 import Jugador
 import Cerebro
 import HandEvaluator
-
+import random
 
 class Bot(Jugador):
     '''
@@ -221,5 +221,27 @@ class Bot(Jugador):
             return True
         return False
         
-        
+    def establecer_estrategia(self,numero):
+        aleatorio = random.random()
+        if numero < 0.9:
+            limite_superior = numero + 0.1
+        else:
+            limite_superior = 1
+        if numero > 0.1:
+            limite_inferior = numero - 0.1
+        else:
+            limite_inferior = 0
+        if limite_superior < 1:
+            rango_mentira = 1 - limite_superior
+        else:
+            rango_mentira = 0
+        if aleatorio < limite_inferior:
+            return (2,0)
+        if aleatorio >= limite_inferior and aleatorio <= limite_superior:
+            return (3,random.randint(1,4))
+        rango_mentira = rango_mentira / 4
+        for i in range(1,5):
+            if aleatorio <= limite_superior + rango_mentira*i:
+                return (1,i)
+         
     
