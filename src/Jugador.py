@@ -15,7 +15,7 @@ class Jugador(object):
     '''
 
 
-    def __init__(self, identificador, fichas, nombre = None, bot = False):
+    def __init__(self, identificador, fichas, nombre = None, bot = False, lock):
         '''
         Constructor, se definen todos los atributos para la clase Jugador
         '''
@@ -26,6 +26,9 @@ class Jugador(object):
         self.bot = bot
         self.apuesta_actual = 0
         self.dealer = False
+        self.lock = lock
+        self.jugada = None
+        self.esperar = False
         
     def verificar_allin(self, apuesta):
         if (apuesta > self.fichas):
@@ -52,5 +55,14 @@ class Jugador(object):
         el contrario se retirarse puede mostrar o no mostrar las cartas)]
         @rtype: String
         '''
-        pass
+        self.esperar = True
+        while not self.esperar:
+            pass
+        
+        return self.jugada                    
+            
+    def definir_jugada(self, jugada):
+        self.jugada = jugada
+        self.esperar = False
+        
         

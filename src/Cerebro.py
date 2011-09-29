@@ -10,26 +10,6 @@ Creado el Sep 25, 2011
 
 import random
 
-#'''
-#para ordenar los odds:
-#importancia de cada juego en cada mano,
-#en la posición 0 en el juego.
-#En la 1 preflop, 2-flop, etc...
-#'''
-#JUEGOS = {'carta alta' : [0, 8, 0, 0, 0],
-#          'par' : [1, 9, 5, 4, 2, 1]
-#          'doble par' : [2, 
-#          'trio' : [3,
-#          'escalera' : [4,
-#          'escalera interna' : [4,
-#          'escalera abierta' : [5,
-#          'color' : [6,
-#          'full' : [7,
-#          'poker' : [8,
-#          'escalera color' : 9
-#          }
-
-
 '''
 valores de los juegos,
 mientras más pequeño es el valor,
