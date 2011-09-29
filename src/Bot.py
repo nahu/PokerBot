@@ -30,6 +30,14 @@ class Bot(Jugador):
         self.nombre = nombre
         self.fichas = fichas
         self.cerebro = Cerebro()
+        self.fichas = fichas
+        self.id = identificador
+        self.mano = [None, None]
+        self.bot = True
+        self.apuesta_actual = 0
+        self.dealer = False
+        self.jugada = None
+        self.esperar = False
     
     def obtener_jugada(self, ronda, comunitarias):
         '''
@@ -48,9 +56,16 @@ class Bot(Jugador):
         si es un bot se calcula.
         [ir(igualar), no_ir, aumentar, all_in, salir, pasar, mostrar, no_mostrar (en caso de ganar porque
         el contrario se retirarse puede mostrar o no mostrar las cartas)]
+        
+        
         @rtype: String
         '''
-        return "igualar"
+        
+        ''' return Cerebro().elegir_accion(mano, comunitarias, ronda, dict_odds, dealer)
+        dealer: true o false si es que soy o no dealer
+        '''
+        
+        return Cerebro().elegir_accion(self.mano, comunitarias, ronda, self.calcular_odds, self.dealer)
          
     
     def calcular_odds(self, ronda, comunitarias):
