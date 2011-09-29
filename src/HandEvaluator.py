@@ -139,19 +139,19 @@ class HandEvaluator(object):
                     return "Jugador2",nombre_jugada2,jugada2
                 if peso.index(jugada1[0][0]) == peso.index(jugada1[0][0]):
                     return "Empate",nombre_jugada1,None
-            if nombre_jugada1 == "doble par":
+            if nombre_jugada1 == "color":
                 if peso.index(jugada1[3][0]) > peso.index(jugada2[3][0]):
                     return "Jugador1",nombre_jugada1,jugada1
                 if peso.index(jugada1[3][0]) < peso.index(jugada2[3][0]):
                     return "Jugador2",nombre_jugada2,jugada2
                 if peso.index(jugada1[3][0]) == peso.index(jugada2[3][0]):
                     return "Empate",nombre_jugada1,None
-            if nombre_jugada1 == "full" or nombre_jugada1 == "color" or nombre_jugada1 == "escalera" or nombre_jugada1 == "escalera color":
-                if peso.index(jugada1[4][0]) > peso.index(jugada2[4][0]):
+            if nombre_jugada1 == "full" or nombre_jugada1 == "doble par" or nombre_jugada1 == "escalera" or nombre_jugada1 == "escalera color":
+                if peso.index(jugada1[3][0]) > peso.index(jugada2[3][0]):
                     return "Jugador1",nombre_jugada1,jugada1
-                if peso.index(jugada1[4][0]) < peso.index(jugada2[4][0]):
+                if peso.index(jugada1[3][0]) < peso.index(jugada2[3][0]):
                     return "Jugador2",nombre_jugada2,jugada2
-                if peso.index(jugada1[4][0]) == peso.index(jugada2[4][0]):
+                if peso.index(jugada1[3][0]) == peso.index(jugada2[3][0]):
                     return "Empate",nombre_jugada1,None
             if nombre_jugada1 == "escalera real":
                 return "Empate",nombre_jugada1,None
@@ -187,6 +187,7 @@ class HandEvaluator(object):
                 if orden.index(probable_mejor) > orden.index(mejor):
                     mejor = probable_mejor
                     jugada = probable_mejor_jugada
+                    print "Escalera encontrada"
             if orden.index("poker") > orden.index(mejor):
                 print "Se comprueba Poker"
                 probable_mejor,probable_mejor_jugada = self.comprobar_poker(total,colores)
@@ -247,7 +248,9 @@ class HandEvaluator(object):
         colors = []
         encontrado = False
         escalera_color = False
+        escalera_color_asegurada = False
         while bandera == 0:
+            escalera_color = False
             i = i+1
             j = 0
             subcadena_numeros = ""
@@ -257,19 +260,22 @@ class HandEvaluator(object):
             if peso.find(subcadena_numeros) > -1 :
                 encontrado = True
                 color_comun = ""
-                if escalera_color == False:
-                    jugada = []
-                    colors = []
-                    for color in colores[i]:
-                        if colores[i+1].count(color)>0 and colores[i+2].count(color)>0 and colores[i+3].count(color)>0:
-                            escalera_color = True
-                            color_comun = color
-                    if escalera_color == True:
-                        for j in range (i , i+4):
-                            jugada.append(total2[j]) 
-                        colors = [[color_comun], [color_comun],[color_comun],[color_comun]]
-                        retorno = self.lista_retorno(jugada, colors)
-                    else:
+                #if escalera_color == False:
+                jugada = []
+                colors = []
+                for color in colores[i]:
+                    if colores[i+1].count(color)>0 and colores[i+2].count(color)>0 and colores[i+3].count(color)>0:
+                        print "Escalera color encontrada"
+                        escalera_color = True
+                        color_comun = color
+                if escalera_color == True:
+                    for j in range (i , i+4):
+                        jugada.append(total2[j]) 
+                    colors = [[color_comun], [color_comun],[color_comun],[color_comun]]
+                    retorno = self.lista_retorno(jugada, colors)
+                    escalera_color_asegurada = True
+                else:
+                    if escalera_color_asegurada == False:
                         for j in range (i,i+4):
                             jugada.append(total2[j])   
                             colors.append([colores[j][0]])     
@@ -280,11 +286,12 @@ class HandEvaluator(object):
                 
         escalera_real = False
         if encontrado == True:
-            if retorno[0][0] == "j" and escalera_color == True:
+            if retorno[0][0] == "j" and escalera_color_asegurada == True:
                 escalera_real = True
             if escalera_real == True:
                 return "escalera real",retorno
-            if escalera_color == True:
+            if escalera_color_asegurada == True:
+                print "Se confirma una escalera color"
                 return "escalera color",retorno
             return "escalera",retorno
         else:
@@ -357,11 +364,15 @@ class HandEvaluator(object):
     def comprobar_full(self,t,c):
         #retorno una lista con los dos numeros, y una lista de dos elementos, siendo los dos elementos
         #otras dos listas indicando los colores correspondientes al numero con mismo indice
+        peso = "23456789djqx1"
         par,jugada_par = self.comprobar_par(t,c)
         if par != None:
             trio, jugada_trio = self.comprobar_trio(t,c)
             if trio != None:
-                return "full",jugada_trio + jugada_par
+                if peso.index(jugada_par[0][0]) > peso.index(jugada_trio[0][0]):
+                    return "full",jugada_trio + jugada_par
+                else:
+                    return "full",jugada_par + jugada_trio
         return None,None
     def comprobar_doble_par(self,t,c):
         total = deepcopy(t)
@@ -374,7 +385,7 @@ class HandEvaluator(object):
             colores.pop(indice)
             mejor, jugada2 = self.comprobar_par(total,colores)
             if mejor != None:
-                return "doble par", jugada + jugada2
+                return "doble par", jugada2 + jugada
             else:
                 return None, None
         else:
@@ -386,8 +397,8 @@ class HandEvaluator(object):
         if total[0] == "1":
             total.append(total[0])
             colores.append(colores[0])
-        total.pop(0)
-        colores.pop(0)
+            total.pop(0)
+            colores.pop(0)
         predefinidos = ["d","s","c","h"]
         jugada = []
         for color in predefinidos:
@@ -496,7 +507,6 @@ class HandEvaluator(object):
 #########################Funciones de modificacion de formatos y demas yerbas##############################
                 
     def normalizar(self,jugada):
-        print "Error",jugada
         for i in range(len(jugada)):
             if jugada[i][0] == "x":
                 jugada[i] = jugada[i].replace("x","k")
@@ -546,7 +556,6 @@ class HandEvaluator(object):
         #for carta in total:
         #    if carta[0] == "k":
         #        carta.replace("k","x")
-        print total
         return total
             
             
