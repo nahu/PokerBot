@@ -375,16 +375,16 @@ def main():
         jugador1.get_cartas()[1], 
         jugador2.get_cartas()[0], 
         jugador2.get_cartas()[1], 
-        jugador1.get_boton("aceptar"), 
-        jugador1.get_boton("apostar"), 
-        jugador1.get_boton("pasar"), 
-        jugador1.get_boton("retirar"), 
-        jugador1.get_boton("subir_apuesta"), 
-        jugador2.get_boton("aceptar"), 
-        jugador2.get_boton("apostar"), 
-        jugador2.get_boton("pasar"), 
-        jugador2.get_boton("retirar"), 
-        jugador2.get_boton("subir_apuesta")
+        #jugador1.get_boton("aceptar"), 
+        #jugador1.get_boton("apostar"), 
+        #jugador1.get_boton("pasar"), 
+        #jugador1.get_boton("retirar"), 
+        #jugador1.get_boton("subir_apuesta"), 
+        #jugador2.get_boton("aceptar"), 
+        #jugador2.get_boton("apostar"), 
+        #jugador2.get_boton("pasar"), 
+        #jugador2.get_boton("retirar"), 
+        #jugador2.get_boton("subir_apuesta")
         ]
     
         
@@ -441,10 +441,11 @@ def main():
     conta = 0                                                           #DEBUG
     cartas_abiertas = False
         
-    repartida_manos = True
+    repartida_manos = False
     flop = False
     turn = False
     river = False
+    
     bandera = False
     while True:
         conta +=1                                                       #DEBUG
