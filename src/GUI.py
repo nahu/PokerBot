@@ -13,7 +13,7 @@ HEIGHT = 600
 MONTO = 10000
 CIEGA = 100
 
-# Clases
+# Clases rgtyrt
 # ---------------------------------------------------------------------
 lock_dibujar = threading.Lock()
 lock_jugador = threading.Lock()
