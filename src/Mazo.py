@@ -89,7 +89,7 @@ class Mazo(object):
         obtienes las claves del diccionario como una lista
         el indice es seteado a -1
         '''
-        self.cartas = self.NOMBRES.keys()
+        self.cartas = NOMBRES.keys()
         self.indice = -1
         
     def mezclar(self):

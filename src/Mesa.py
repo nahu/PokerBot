@@ -8,9 +8,9 @@ Creado el 23/09/2011
 @author: Vanessa Jannete Cañete
 @author: Gabriela Gaona
 '''
-import Mazo
+from Mazo import *
 import HandEvaluator
-import Ronda
+from Ronda import Ronda
 
 class Mesa(object):
     '''
@@ -43,12 +43,12 @@ class Mesa(object):
         self.lock = lock
     
     def set_dibujar(self):
-        self.lock.adquire()
+        self.lock.acquire()
         self.dibujar = True
         self.lock.release()
 
     def set_dibujado(self):
-        self.lock.adquire()
+        self.lock.acquire()
         self.dibujar = False
         self.lock.release()
         
@@ -276,13 +276,13 @@ class Mesa(object):
     def poner_ciegas(self):
         self.bote = 0
         #el dealer pone la ciega chica.
-        if self.jugadores[self.dealer].verficar_allin():
+        if self.jugadores[self.dealer].verificar_allin(self.ciega/2):
             self.establecer_allin(self.dealer)
         else:
             self.jugadores[self.dealer].fichas -= self.ciega / 2
             self.jugadores[self.dealer].apuesta_actual = self.ciega / 2
         #el otro pone la ciega grande.
-        if self.jugadores[self.obtener_no_dealer()].verficar_allin():
+        if self.jugadores[self.obtener_no_dealer()].verificar_allin(self.ciega):
             self.establecer_allin(self.obtener_no_dealer())
         else:
             self.jugadores[self.obtener_no_dealer()].fichas -= self.ciega
