@@ -96,7 +96,7 @@ JUEGOS = {0 : 'empate',
           3 : 'trio',
           4 : 'escalera',
           5 : 'color',
-          6 : 'full house',
+          6 : 'full',
           7 : 'poker',
           8 : 'escalera color',
           9 : 'escalera real'
