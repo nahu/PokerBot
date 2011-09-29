@@ -15,7 +15,7 @@ class Jugador(object):
     '''
 
 
-    def __init__(self, identificador, fichas, nombre = None, bot = False, lock):
+    def __init__(self, identificador, fichas, nombre, bot, lock = None):
         '''
         Constructor, se definen todos los atributos para la clase Jugador
         '''

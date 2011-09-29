@@ -45,9 +45,9 @@ class Bot(Jugador):
         el contrario se retirarse puede mostrar o no mostrar las cartas)]
         @rtype: String
         '''
-        pass           
+        return "igualar"
+         
     
-        #odd[i][1]
     def calcular_odds(self, ronda, comunitarias):
         cartas_restantes = [50, 47, 46, 45]
         odds={"carta alta":[None,True],"par":[None,True], "doble par":[None,True], "trio":[None,True], "escalera interna":[None,True], "escalera abierta":[None,True], 
