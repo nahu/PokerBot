@@ -81,6 +81,8 @@ class Jugador(object):
         
     def igualar(self, total):
         monto = total-self.apuesta_actual
+        if (self.apuesta_actual==total):
+            return 0,False
         if (self.fichas > monto):
             self.fichas -= monto
             self.apuesta_actual += monto

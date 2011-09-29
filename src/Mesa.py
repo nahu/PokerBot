@@ -66,22 +66,24 @@ class Mesa(object):
         tercera posición indica el nombre de la jugada 
         ganadora.
         '''
+        self.resultado = None
         self.poner_ciegas()
         self.jugador_actual = self.dealer
-        
-        self.set_dibujar()
-        self.esperar_dibujo()
+        no_ir = False
         
         for tipo in range(1,5): #iterador de rondas
             self.croupier(tipo) #acciones del croupier, repartir manos y colocar comunitarias
+            self.set_dibujar()
+            self.esperar_dibujo()
             if not self.allin:
                 resultado_ronda = self.ronda(tipo)
                 if resultado_ronda == "fin_juego":
+                    no_ir = True
                     break
-
+                
             self.jugador_actual = self.obtener_no_dealer()#después del pre-flop el que juega primero es el que no es dealer
         
-        self.dealer = self.obtener_no_dealer()
+        self.dealer = self.obtener_no_dealer()#se cambia el dealer para la siguiente ronda
         
         return self.evaluar_ganador()
         
@@ -104,8 +106,10 @@ class Mesa(object):
         termina_juego = False 
         if self.jugador[0].fichas == 0 or self.jugador[1].fichas == 0:
             termina_juego = True
-       
-        return termina_juego, gana, nombre_jugada
+        
+        self.resultado = [termina_juego, gana, nombre_jugada]
+        
+        return self.resultado
     
     def ronda(self, tipo_ronda):
         #retorna si se continúa o no con la siguiente ronda
@@ -117,7 +121,7 @@ class Mesa(object):
                 if not self.allin:
                     self.ronda_actual.pot = self.bote
                     jugada = self.jugadores[self.jugador_actual].obtener_jugada(self.ronda_actual, self.comunitarias)
-                    resultado = self.evaluar_accion(jugada, self.jugadores[self.jugador_actual])
+                    resultado = self.evaluar_accion(jugada, self.jugador_actual)
                     if resultado != "continuar":
                         break
 
@@ -144,35 +148,36 @@ class Mesa(object):
         if jugada=="no ir":
             return "fin_juego"
         #PRE FLOP
-        if self.ronda_actual == 0:
-            accion = self.pre_flop(jugada, nro_apuesta, jugador)
-        if self.ronda_actual == 1:
+        if self.ronda_actual.tipo == 0:
+            accion = self.pre_flop(jugada, jugador)
+            self.set_nro_apuesta(self.ciega)        
+        if self.ronda_actual.tipo == 1:
             accion = self.flop(jugada, self.ciega, jugador)
-        if self.ronda_actual == 2:
+            self.set_nro_apuesta(self.ciega)
+        if self.ronda_actual.tipo == 2:
             accion = self.flop(jugada, self.ciega*2, jugador)
-        if self.ronda_actual == 3:
-            accion = self.flop(jugada, self.ciega*2, jugador)                  
-        self.set_nro_apuesta()
+            self.set_nro_apuesta(self.ciega*2)
+        if self.ronda_actual.tipo == 3:
+            accion = self.flop(jugada, self.ciega*2, jugador)
+            self.set_nro_apuesta(self.ciega*2)                  
         return accion
 
-    def set_nro_apuesta(self):
+    def set_nro_apuesta(self,ciega):
         apuesta1 = self.jugadores[0].apuesta_actual
         apuesta2 = self.jugadores[1].apuesta_actual
         mayor = (apuesta1,apuesta2)[apuesta1>apuesta2]
-        if mayor < self.ciega*2:
+        if mayor < ciega*2:
             self.ronda_actual.nro_apuesta = 1
-        if mayor < self.ciega*3:
+        if mayor < ciega*3:
             self.ronda_actual.nro_apuesta = 2
-        if mayor < self.ciega*4:
+        if mayor < ciega*4:
             self.ronda_actual.nro_apuesta = 3
-        if mayor < self.ciega*4:
+        if mayor < ciega*4:
             self.ronda_actual.nro_apuesta = 4
                        
-    def pre_flop(self, jugada, nro_apuesta, jugador):
+    def pre_flop(self, jugada, jugador):
         if self.es_dealer(jugador):
-            if (jugada=="igualar"):
-                if self.apuestas_igualadas():
-                    return "fin_ronda"
+            if jugada=="igualar":
                 if self.jugadores[jugador].apuesta_actual == self.ciega/2:
                     self.jugadores[jugador].completar_ciega(self.ciega)
                     self.bote+=self.ciega/2
@@ -181,44 +186,58 @@ class Mesa(object):
                     monto = self.jugadores[self.obtener_no_dealer()].apuesta_actual
                     apuesta, self.allin =self.jugadores[jugador].igualar(monto) 
                     self.bote += apuesta
+                    if self.allin:
+                        return "fin_ronda"
                     return "continuar"
-            if (jugada=="apostar"):
+            if jugada=="apostar":
                 if self.jugadores[jugador].apuesta_actual == self.ciega/2:
                     apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega*1,5)
                 else: 
                     apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega)                      
                 self.bote += apuesta
+                if self.allin:
+                    return "fin_ronda"
                 return "continuar"
         else: #NO ES DEALER
             contrario = self.obtener_contrario(jugador)
             monto = self.jugadores[contrario].apuesta_actual
             if jugada=="igualar":
-                if self.apuestas_igualadas():
+                if self.apuestas_igualadas(): #puede terminar la ronda (el no dealer)
                     return "fin_ronda"
                 else:
                     apuesta, self.allin = self.jugadores[jugador].igualar(monto)
                     self.bote += apuesta
+                    if self.allin:
+                        return "fin_ronda"
                     return "continuar"
             if jugada=="apostar":
                 apuesta, self.allin = self.jugadores[jugador].igualar(monto)
                 self.bote += apuesta
-                
+                if self.allin:
+                    return "fin_ronda"
                 if self.jugadores[contrario].apuesta_actual < self.ciega*4:
                     apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega)
                     self.bote += apuesta
+                    if self.allin:
+                        return "fin_ronda"
                     return "continuar"
                 else:
                     apuesta, self.allin = self.jugadores[jugador].igualar(monto)
                     self.bote += apuesta
-                    return "continuar"
+                    return "fin_ronda"
     def otras_rondas(self, jugada, ciega_minima, jugador):        
-        if (jugada=="igualar"):
+        if jugada=="igualar":
             if self.apuestas_igualadas():
-                return "fin_ronda"
+                if self.es_dealer(jugador): #puede terminar la ronda
+                    return "fin_ronda"
+                else:
+                    return "continuar"
             else:
                 monto = self.jugadores[self.obtener_no_dealer()].apuesta_actual
                 apuesta, self.allin =self.jugadores[jugador].igualar(monto) 
                 self.bote += apuesta
+                if self.allin:
+                    return "fin_ronda"
                 return "continuar"
         if jugada=="apostar":
             contrario = self.obtener_contrario(jugador) 
@@ -226,16 +245,19 @@ class Mesa(object):
             
             apuesta, self.allin = self.jugadores[jugador].igualar(monto)
             self.bote += apuesta            
-            
+            if self.allin:
+                return "fin_ronda"
             if self.jugadores[contrario].apuesta_actual < ciega_minima*4:
                 apuesta, self.allin = self.jugadores[jugador].subir_apuesta(ciega_minima)
                 self.bote += apuesta
+                if self.allin:
+                    return "fin_ronda"
                 return "continuar"
             else:
                 apuesta, self.allin = self.jugadores[jugador].igualar(monto)
                 self.bote += apuesta
-                return "continuar"
-            
+                return "fin_ronda"  
+                
     def apuestas_igualadas(self):
         if self.jugadores[0].apuesta_actual == self.jugadores[1].apuesta_actual:
             return True
