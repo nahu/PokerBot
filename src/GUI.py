@@ -20,7 +20,7 @@ lock_jugador = threading.Lock()
   
 class Thread(threading.Thread):  
     def __init__(self, mesa):
-        threading.Thread.__init__(self)  
+        threading.Thread.__init__(self)
         self.mesa = mesa
     
     def run(self):
@@ -35,8 +35,13 @@ class Thread(threading.Thread):
     def dibujado(self):
         self.mesa.set_dibujado()
         
-    def unset_num(self):
-        self.num = 1
+    def mostrar_boton(self):
+        return self.mesa.jugadores[self.mesa.jugador_actual].dibujar_botones()
+    
+    def establecer_jugada(self, jugada):
+        self.mesa.jugadores[self.jugador_actual].definir_jugada(jugada)
+        
+        
 
 class Carta(pygame.sprite.Sprite):    
     def __init__(self, card , px, py):
@@ -104,10 +109,10 @@ class Boton(pygame.sprite.Sprite):
         self.rect.centery = py
         self.activo = False
     
-    def set_activo():
+    def set_activo(self):
         self.activo = True
     
-    def set_inactivo():
+    def set_inactivo(self):
         self.activo = False
     
 class JugadorGUI():    

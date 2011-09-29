@@ -65,4 +65,7 @@ class Jugador(object):
         self.jugada = jugada
         self.esperar = False
         
+    def dibujar_botones(self):
+        return self.esperar
+        
         

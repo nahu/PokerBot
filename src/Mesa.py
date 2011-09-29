@@ -75,6 +75,8 @@ class Mesa(object):
             self.croupier(tipo) #acciones del croupier, repartir manos y colocar comunitarias
             if not self.allin:
                 resultado_ronda = self.ronda(tipo)
+                if resultado_ronda == "fin_juego":
+                    break
 
             self.jugador_actual = self.obtener_no_dealer()#después del pre-flop el que juega primero es el que no es dealer
         
@@ -105,7 +107,7 @@ class Mesa(object):
             if resultado != "continuar" or self.allin:
                 break
                 
-        return r
+        return resultado
     
     
     def evaluar_accion(self, jugada, nro_apuesta, jugador): 
@@ -144,11 +146,13 @@ class Mesa(object):
             self.establecer_allin(self.dealer)
         else:
             self.jugadores[self.dealer].fichas -= self.ciega / 2
+            self.jugadores[self.dealer].apuesta_actual = self.ciega / 2
         #el otro pone la ciega grande.
         if self.jugadores[self.obtener_no_dealer()].verficar_allin():
             self.establecer_allin(self.obtener_no_dealer())
         else:
             self.jugadores[self.obtener_no_dealer()].fichas -= self.ciega
+            self.jugadores[self.obtener_no_dealer()].apuesta_actual = self.ciega
  
     def establecer_allin(self, jugador):
         self.allin = True   
@@ -182,7 +186,7 @@ class Mesa(object):
         elif tipo_ronda == 2:#flop
             for i in range(0, 3):
                 self.comunitarias[i] = self.mazo.obtener_siguiente()
-                elif tipo_ronda == 3:#turn
+        elif tipo_ronda == 3:#turn
             self.comunitarias[3] = self.mazo.obtener_siguiente()
         elif tipo_ronda == 4:#river
             self.comunitarias[4] = self.mazo.obtener_siguiente()
