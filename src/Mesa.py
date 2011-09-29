@@ -316,7 +316,7 @@ class Mesa(object):
             self.mazo.mezclar()
             for i in range(0, self.nro_jugadores):
                 for jug in self.jugadores:
-                    self.jugadores[jug].mano[i] = self.mazo.obtener_siguiente()
+                    jug.mano[i] = self.mazo.obtener_siguiente()
         elif tipo_ronda == 2:#flop
             for i in range(0, 3):
                 self.comunitarias[i] = self.mazo.obtener_siguiente()
