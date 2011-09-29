@@ -86,9 +86,25 @@ class Mesa(object):
         
     def evaluar_ganador(self):
         #self.hand_eval.evaluar(jugador1, jugador2) obtiene el nombre de la jugada ganadora y el ganador
-        #verificar si termina el juego
+        #verificar si termina el juego si alguno de los jugadores se quedo sin ficha
         #armar la lista resultado de self.juego()
-        pass    
+        '''HandEvaluator().ganador(comunitarias, mano1, mano2)
+           jugador: Jugador 1 , Jugador 2, empate
+           nombre de la jugada: 
+           jugada: [], None'''
+        jugador, nombre_jugada, cartas = HandEvaluator().ganador(self.comunitarias, self.jugadores[0].mano, self.jugadores[1].mano)
+        gana = None
+        if jugador == "Jugador1" :
+            gana = 0
+        
+        if jugador == "Jugador2" :
+            gana = 1
+        
+        termina_juego = False 
+        if self.jugador[0].fichas == 0 or self.jugador[1].fichas == 0:
+            termina_juego = True
+       
+        return termina_juego, gana, nombre_jugada
     
     def ronda(self, tipo_ronda):
         #retorna si se continúa o no con la siguiente ronda

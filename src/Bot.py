@@ -12,6 +12,7 @@ Creado el 23/09/2011
 
 import Jugador
 import Cerebro
+import HandEvaluator
 
 
 class Bot(Jugador):
@@ -24,6 +25,7 @@ class Bot(Jugador):
         Constructor del Bot
 
         '''
+        self.handEval = HandEvaluator()
         self.cerebro = Cerebro()
     
     def obtener_jugada(self, ronda, comunitarias):
@@ -49,6 +51,7 @@ class Bot(Jugador):
     
         #odd[i][1]
     def calcular_odds(self, ronda, comunitarias):
+        
         cartas_restantes = [50, 47, 46, 45]
         odds={"carta alta":[None,True],"par":[None,True], "doble par":[None,True], "trio":[None,True], "escalera interna":[None,True], "escalera abierta":[None,True], 
               "color":[None, True], "full":[None,True], "poker":[None,True]}
