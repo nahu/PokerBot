@@ -9,7 +9,7 @@ Creado el 23/09/2011
 @author: Gabriela Gaona
 '''
 from Mazo import *
-import HandEvaluator
+from HandEvaluator import HandEvaluator
 from Ronda import Ronda
 
 class Mesa(object):
@@ -56,6 +56,19 @@ class Mesa(object):
         while True:
             if not self.dibujar:
                 break
+            
+    def imprimir(self):
+        print "bote: ",  self.bote
+        for j in self.jugadores:
+            print "Jugador :"
+            j.imprimir()
+            
+        print "posicion dealer: ",  self.dealer
+        print "comunitarias: ", self.comunitarias
+        print "ronda actual:"
+        self.ronda_actual.imprimir()
+        print "jugador actual: ", self.jugador_actual
+        print "es allin: ", self.allin
 
     def juego(self):
         '''
@@ -118,7 +131,7 @@ class Mesa(object):
             gana = 1
         
         termina_juego = False 
-        if self.jugador[0].fichas == 0 or self.jugador[1].fichas == 0:
+        if self.jugadores[0].fichas == 0 or self.jugadores[1].fichas == 0:
             termina_juego = True
         
         self.resultado = [termina_juego, gana, nombre_jugada]
@@ -130,8 +143,12 @@ class Mesa(object):
         resultado = "continuar"
 #        self.jugadores[self.dealer].mano[0] = "9c"
 #        self.jugadores[self.dealer].mano[1] = "9d"
+        print "Ronda ", tipo_ronda
+        c = 0
         while True:
             for i in range(0, self.nro_jugadores):
+                print "-----> iteracion ", c
+                self.imprimir()
                 if not self.allin:
                     self.ronda_actual.pot = self.bote
                     jugada = self.jugadores[self.jugador_actual].obtener_jugada(self.ronda_actual, self.comunitarias)
@@ -142,6 +159,7 @@ class Mesa(object):
                         break
 
                 self.siguiente_jugador()
+                c += 1
                 
             if resultado != "continuar" or self.allin:
                 break
@@ -162,7 +180,9 @@ class Mesa(object):
         #si no_ir > fin_juego
         #si igualan las apuestas y se pasa > fin_ronda        
         if jugada=="no ir":
+            print "+++++++accion: se fue"
             return "fin_juego"
+        accion = ''
         #PRE FLOP
         if self.ronda_actual.tipo == 0:
             accion = self.pre_flop(jugada, jugador)
@@ -175,7 +195,8 @@ class Mesa(object):
             self.set_nro_apuesta(self.ciega*2)
         if self.ronda_actual.tipo == 3:
             accion = self.otras_rondas(jugada, self.ciega*2, jugador)
-            self.set_nro_apuesta(self.ciega*2)                  
+            self.set_nro_apuesta(self.ciega*2)    
+        print 'accion: ', accion              
         return accion
 
     def set_nro_apuesta(self,ciega):
@@ -219,6 +240,7 @@ class Mesa(object):
             monto = self.jugadores[contrario].apuesta_actual
             if jugada=="igualar":
                 if self.apuestas_igualadas(): #puede terminar la ronda (el no dealer)
+                    print "+++++++accion: fin ronda - pasaron"
                     return "fin_ronda"
                 else:
                     apuesta, self.allin = self.jugadores[jugador].igualar(monto)
@@ -245,6 +267,7 @@ class Mesa(object):
         if jugada=="igualar":
             if self.apuestas_igualadas():
                 if self.es_dealer(jugador): #puede terminar la ronda
+                    print "+++++++accion: fin ronda - pasaron"
                     return "fin_ronda"
                 else:
                     return "continuar"
@@ -301,9 +324,8 @@ class Mesa(object):
         if self.jugadores[self.obtener_no_dealer()].verificar_allin(self.ciega):
             self.establecer_allin(self.obtener_no_dealer())
         else:
-            apuesta, allin = self.jugadores[self.obtener_no_dealer()].subir_apuesta(self.ciega)
+            apuesta, self.allin = self.jugadores[self.obtener_no_dealer()].subir_apuesta(self.ciega)
             self.bote += apuesta
-
  
     def establecer_allin(self, jugador):
         self.allin = True   
@@ -341,3 +363,7 @@ class Mesa(object):
             self.comunitarias.append(self.mazo.obtener_siguiente())
         elif tipo_ronda == 4:#river
             self.comunitarias.append(self.mazo.obtener_siguiente())
+        
+        
+
+        

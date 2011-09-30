@@ -99,8 +99,8 @@ class Bot(Jugador):
             odds["par"][0]=(cartas_restantes[ronda.tipo]/6)-1
              
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++  
-        print "numero:", numero
-        print "colores: ", colores
+#        print "numero:", numero
+#        print "colores: ", colores
         tipo, jugada = self.handEval.comprobar_doble_par(numero,colores)
         if tipo:
             #tiene doble par

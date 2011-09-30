@@ -133,11 +133,11 @@ class HandEvaluator(object):
             return "Jugador2",nombre_jugada2,jugada2
         if orden.index(nombre_jugada1) == orden.index(nombre_jugada2):
             if nombre_jugada1 == "carta alta" or nombre_jugada1 == "par" or nombre_jugada1 == "trio" or nombre_jugada1 == "poker":
-                if peso.index(jugada1[0][0]) > peso.index(jugada1[0][0]):
+                if peso.index(jugada1[0][0]) > peso.index(jugada2[0][0]):
                     return "Jugador1",nombre_jugada1,jugada1
-                if peso.index(jugada1[0][0]) < peso.index(jugada1[0][0]):
+                if peso.index(jugada1[0][0]) < peso.index(jugada2[0][0]):
                     return "Jugador2",nombre_jugada2,jugada2
-                if peso.index(jugada1[0][0]) == peso.index(jugada1[0][0]):
+                if peso.index(jugada1[0][0]) == peso.index(jugada2[0][0]):
                     return "Empate",nombre_jugada1,None
             if nombre_jugada1 == "color":
                 if peso.index(jugada1[3][0]) > peso.index(jugada2[3][0]):

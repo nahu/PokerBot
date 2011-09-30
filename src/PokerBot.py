@@ -9,7 +9,7 @@ Creado el Sep 27, 2011
 @author: Gabriela Gaona
 '''
 from Bot import Bot
-from MesaVane import Mesa
+from Mesa2 import Mesa
 
 FICHAS1 = 10000
 FICHAS2 = 10000
