@@ -31,6 +31,11 @@ class Ronda(object):
         self.ciega = ciega
         self.pot = pot
     
+    def imprimir(self):
+        print "  tipo ronda:", self.tipo
+        print "  nro apuesta: ", self.nro_apuesta
+        print "  pot ronda: ", self.pot
+        
     def apuesta_de_ronda(self):           
         return self.pot + (self.monto_a_subir() * self.nro_apuesta)
     
