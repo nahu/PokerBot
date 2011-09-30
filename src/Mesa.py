@@ -145,9 +145,12 @@ class Mesa(object):
            jugador: Jugador 1 , Jugador 2, empate
            nombre de la jugada: 
            jugada: [], None'''
+        #jugador, nombre_jugada, cartas = HandEvaluator().ganador(self.comunitarias, self.jugadores[0].mano, self.jugadores[1].mano)
+
         jugador, nombre_jugada, cartas = HandEvaluator().ganador(self.comunitarias, self.jugadores[0].mano, self.jugadores[1].mano)
         
-        print "cartas de la jugada: ", cartas
+        if cartas:
+            print "cartas de la jugada: ", cartas
         
         gana = None
         if jugador == "Jugador1" :
@@ -171,6 +174,9 @@ class Mesa(object):
         self.resultado = [continua_juego, gana, nombre_jugada]
         
         return self.resultado
+
+            
+            
     
     def ronda(self, tipo_ronda):
         #retorna si se continúa o no con la siguiente ronda

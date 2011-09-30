@@ -236,7 +236,7 @@ class HandEvaluator(object):
                     return "Jugador1",nombre_jugada1,jugada1
                 if peso.index(jugada1[4][0]) < peso.index(jugada2[4][0]):
                     return "Jugador2",nombre_jugada2,jugada2
-                "Empate",nombre_jugada1,None
+                return "Empate",nombre_jugada1,None
                 
             if nombre_jugada1 == "escalera" or nombre_jugada1 == "escalera color":
                 if peso.index(jugada1[3][0]) > peso.index(jugada2[3][0]):
