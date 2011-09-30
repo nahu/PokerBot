@@ -33,7 +33,7 @@ class Mesa(object):
         self.bote = 0
         self.jugadores = jugadores
         self.dealer = 0 #posicion en la lista jugaores
-        self.comunitarias = [None, None, None, None, None]
+        self.comunitarias = []#[False, False, False, False, False]
         self.ronda_actual = None
         self.nro_jugadores = 2
         self.jugador_actual = 0
@@ -326,11 +326,11 @@ class Mesa(object):
                     jug.mano[i] = self.mazo.obtener_siguiente()
         elif tipo_ronda == 2:#flop
             for i in range(0, 3):
-                self.comunitarias[i] = self.mazo.obtener_siguiente()
+                self.comunitarias.append(self.mazo.obtener_siguiente())
         elif tipo_ronda == 3:#turn
-            self.comunitarias[3] = self.mazo.obtener_siguiente()
+            self.comunitarias.append(self.mazo.obtener_siguiente())
         elif tipo_ronda == 4:#river
-            self.comunitarias[4] = self.mazo.obtener_siguiente()
+            self.comunitarias.append(self.mazo.obtener_siguiente())
         
         
 

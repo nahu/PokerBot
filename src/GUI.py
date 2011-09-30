@@ -7,6 +7,7 @@ from pygame.locals import *
 import threading  
 from Jugador import Jugador
 from Mesa import Mesa
+from Bot import Bot
 
 # Constantes
 WIDTH = 1084
@@ -346,8 +347,12 @@ def main():
     
     '''Instancias'''
 
-    jug1 = Jugador(1,FICHAS1, "Pibe",  lock_jugador)
-    jug2 = Jugador(2,FICHAS2, "PC")
+#    jug1 = Jugador(1,FICHAS1, "Pibe",  lock_jugador)
+#    jug2 = Jugador(2,FICHAS2, "PC")
+
+    jug1 = Bot(1,FICHAS1, "Pibe")
+    jug2 = Bot(2,FICHAS2, "PC")
+
     mesa_nahu = Mesa(CIEGA, [jug1, jug2], lock_dibujar)
     
     hilo = Thread(mesa_nahu)
@@ -421,7 +426,7 @@ def main():
         
         if hilo.mesa.dibujar:
             if hilo.mesa.ronda_actual.tipo == 1:
-                print 'xxx'                
+                #print 'xxx'                
                 jugador1.carta1.set_carta(hilo.mesa.jugadores[0].mano[0])
                 jugador1.carta2.set_carta(hilo.mesa.jugadores[0].mano[1])
                 jugador2.carta1.set_carta(hilo.mesa.jugadores[1].mano[0])
@@ -598,11 +603,20 @@ def main():
                 print jug2
         
         '''Animaciones'''
+<<<<<<< HEAD
         
 #        if repartida_manos:
 #            repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
 #            if not repartida_manos:
 #                flop = True
+=======
+        if repartida_manos:
+            #print 'yyy'
+            repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
+            if not repartida_manos:
+                flop = True
+
+>>>>>>> branch 'master' of ssh://git@github.com/nahu/PokerBot.git
 #        if flop:
 #            flop = mesa.mostrar_flop('kd','kh','ks')
 #            if not flop:
