@@ -155,6 +155,12 @@ class JugadorGUI():
         self.boton_subir_apuesta = Boton("subir_apuesta", px, py+70)
                
     
+    def cartas_al_maso(self):
+        self.carta1.rect.centerx = WIDTH/4 
+        self.carta1.rect.centery = HEIGHT/2
+        
+        self.carta2.rect.centerx = WIDTH/4 
+        self.carta2.rect.centery = HEIGHT/2
     
     def set_cartas(self,carta1,carta2):
         self.carta1.value = carta1
@@ -203,6 +209,22 @@ class MesaGUI():
         self.carta3 = Carta('b', WIDTH/4, HEIGHT/2)
         self.carta4 = Carta('b', WIDTH/4, HEIGHT/2)
         self.carta5 = Carta('b', WIDTH/4, HEIGHT/2)
+        
+    def cartas_al_maso(self):
+        self.carta1.rect.centerx = WIDTH/4 
+        self.carta1.rect.centery = HEIGHT/2
+        
+        self.carta2.rect.centerx = WIDTH/4 
+        self.carta2.rect.centery = HEIGHT/2
+        
+        self.carta3.rect.centerx = WIDTH/4 
+        self.carta3.rect.centery = HEIGHT/2
+        
+        self.carta4.rect.centerx = WIDTH/4 
+        self.carta4.rect.centery = HEIGHT/2
+        
+        self.carta5.rect.centerx = WIDTH/4 
+        self.carta5.rect.centery = HEIGHT/2
 
     def mostrar_flop(self):
         
@@ -536,6 +558,18 @@ def main():
                 
                 if not river:
                     river = True
+                
+                if hilo.mesa.resultado != None:
+                    if not hilo.mesa.resultado[0]:
+                        jugador1.cartas_al_maso()
+                        mesa.cartas_al_maso()
+                        repartida_manos = False
+                        flop = False
+                        turn = False
+                        river = False
+                
+                        
+                    
                 
                 hilo.dibujado()
                 # animacion flop -- solo una vez
