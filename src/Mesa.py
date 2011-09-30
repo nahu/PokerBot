@@ -193,8 +193,8 @@ class Mesa(object):
                 if not self.allin:
                     self.ronda_actual.pot = self.bote
                     jugada = self.jugadores[self.jugador_actual].obtener_jugada(self.ronda_actual, self.comunitarias)
-#                    self.set_dibujar()
-#                    self.esperar_dibujo()
+                    self.set_dibujar()
+                    self.esperar_dibujo()
                     resultado = self.evaluar_accion(jugada, self.jugador_actual)
                     if resultado != "continuar":
                         break
