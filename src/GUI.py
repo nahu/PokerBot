@@ -29,8 +29,8 @@ class Thread(threading.Thread):
     def run(self):
         while True:
             resultado = self.mesa.juego()
-            print "Ganó el jugador" + self.mesa.jugadores[resultado[1]]
-            print "Jugada ganadora: " + resultado[2]
+#            print "Ganó el jugador" + str(self.mesa.jugadores[resultado[1]])
+#            print "Jugada ganadora: " + resultado[2]
             
             if not resultado[0] or self.term:#el juego terminó
                 break
@@ -244,20 +244,19 @@ class MesaGUI():
             return False
         return True
 
-    def mostrar_turn(self, card):
+    def mostrar_turn(self):
         repartida = False
-        self.carta4.set_carta(card)
         repartida = self.carta4.repartir(623, HEIGHT/2)
         if repartida:
             self.carta4.flip()
             return False
         return True
 
-    def mostrar_river(self, card):
+    def mostrar_river(self):
         repartida = False
-        self.carta5.set_carta(card)
         repartida = self.carta5.repartir(703, HEIGHT/2)
         if repartida:
+            print repartida
             self.carta5.flip()
             return False
         return True
@@ -332,7 +331,7 @@ def actualizar_mesa(mesa , hilo, tipo):
     elif tipo == 3:
         mesa.carta4.set_carta(hilo.mesa.comunitarias [3])
     elif tipo == 4:
-        mesa.carta3.set_carta(hilo.mesa.comunitarias [4])
+        mesa.carta5.set_carta(hilo.mesa.comunitarias [4])
 
 def actualizar_jugador(jugador1, jugador2, hilo ):
                 jugador1.carta1.set_carta(hilo.mesa.jugadores[0].mano[0])
@@ -457,9 +456,13 @@ def main():
     cartas_abiertas = False
         
     repartida_manos = False
+    repartida_terminada = False
     flop = False
+    flop_terminado = False
     turn = False
+    turn_terminado = False
     river = False
+    river_terminado = False
     
     bandera = False
     while True:
@@ -468,7 +471,7 @@ def main():
         
         if hilo.mesa.dibujar:
             if hilo.mesa.ronda_actual.tipo == 1:
-                print 'xxx' 
+                print 'Entro Ronda 1' 
                 actualizar_jugador(jugador1, jugador2, hilo )
                 
                 if jugador1.dealer:
@@ -502,7 +505,7 @@ def main():
                 
                 hilo.dibujado()
 
-            elif hilo.mesa.ronda_actual == 2:
+            elif hilo.mesa.ronda_actual.tipo == 2:
                 print 'Entro Ronda 2'
                 
                 repartida_manos = True
@@ -522,7 +525,7 @@ def main():
                 
                 hilo.dibujado()
 
-            elif hilo.mesa.ronda_actual == 3:
+            elif hilo.mesa.ronda_actual.tipo == 3:
                 print 'Entro Ronda 3'
                 
                 flop = True
@@ -541,7 +544,7 @@ def main():
                     turn = True
                 
                 hilo.dibujado()
-            elif hilo.mesa.ronda_actual == 4:
+            elif hilo.mesa.ronda_actual.tipo == 4:
                 print 'Entro Ronda 4'
                 
                 turn = True
@@ -710,22 +713,23 @@ def main():
         if repartida_manos:
             repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
             if not repartida_manos:
-                #flop = True
-                pass
+                repartida_terminada = True
                 
-        if flop:
+        if flop and repartida_terminada:
             flop = mesa.mostrar_flop()
             if not flop:
-                #turn = True
-                pass
+                flop_terminado = True
 
-        if turn:
+        if turn and flop_terminado:
             turn = mesa.mostrar_turn()
             if not turn:
-                #river = True
-                pass
-        if river:
+                turn_terminado = True
+                
+        if river and turn_terminado:
             river = mesa.mostrar_river()
+            if not river:
+                river_terminado = True
+
         
         '''Actualizar Sprites'''
         
