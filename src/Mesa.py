@@ -145,7 +145,16 @@ class Mesa(object):
            jugador: Jugador 1 , Jugador 2, empate
            nombre de la jugada: 
            jugada: [], None'''
+        print "COMUNITARIAS" ,self.comunitarias
+        print "JUGADOR 1 MANO" , self.jugadores[0].mano
+        print "JUGADOR 2", self.jugadores[1].mano
+        
         jugador, nombre_jugada, cartas = HandEvaluator().ganador(self.comunitarias, self.jugadores[0].mano, self.jugadores[1].mano)
+        
+        print "RETORNO GANADOR HAND EVALUATOR / MESA.PY"
+        print "JUGADOR: ", jugador
+        print "NOMBRE JUGADA: ", nombre_jugada
+        print "CARTAS: ", cartas
         
         print "cartas de la jugada: ", cartas
         gana = None
@@ -260,6 +269,7 @@ class Mesa(object):
                         return "fin_ronda"
                 return "continuar"
             if jugada=="apostar":
+                print "QUIERE APOSTAR"
                 if self.jugadores[jugador].apuesta_actual == self.ciega/2:
                     apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega*1.5)
                     self.bote += apuesta
@@ -269,12 +279,12 @@ class Mesa(object):
                     self.bote += apuesta
                     if self.allin:
                         return "fin_ronda"
-                                    
-                    apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega)                      
-                    self.bote += apuesta
-                if self.allin:
-                    return "fin_ronda"
-                return "continuar"
+                    if monto >= self.ciega*4:
+                        apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega)                      
+                        self.bote += apuesta
+                        if self.allin:
+                            return "fin_ronda"
+                        return "continuar"
         else: #NO ES DEALER
             contrario = self.obtener_contrario(jugador)
             monto = self.jugadores[contrario].apuesta_actual
@@ -293,7 +303,7 @@ class Mesa(object):
                 self.bote += apuesta
                 if self.allin:
                     return "fin_ronda"
-                if self.jugadores[contrario].apuesta_actual == self.ciega*4:
+                if self.jugadores[contrario].apuesta_actual >= self.ciega*4:
                     return "fin_ronda"
                 else:
                     apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega)
@@ -315,7 +325,7 @@ class Mesa(object):
                 self.bote += apuesta
                 if self.allin:
                     return "fin_ronda"
-                if self.jugadores[jugador].dealer and self.jugadores[jugador].apuesta_actual == ciega_minima*4:
+                if self.jugadores[jugador].dealer and self.jugadores[jugador].apuesta_actual >= ciega_minima*4:
                     return "fin_ronda"
                 return "continuar"
         if jugada=="apostar":
@@ -326,7 +336,7 @@ class Mesa(object):
             self.bote += apuesta
             if self.allin:
                 return "fin_ronda"
-            if self.jugadores[contrario].apuesta_actual == ciega_minima*4:
+            if self.jugadores[contrario].apuesta_actual >= ciega_minima*4:
                 return "fin_ronda"
             else:
                 apuesta, self.allin = self.jugadores[jugador].subir_apuesta(ciega_minima)
