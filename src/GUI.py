@@ -599,11 +599,12 @@ def main():
                 print jug2
         
         '''Animaciones'''
-        
-#        if repartida_manos:
-#            repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
-#            if not repartida_manos:
-#                flop = True
+        if repartida_manos:
+            print 'yyy'
+            repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
+            if not repartida_manos:
+                flop = True
+
 #        if flop:
 #            flop = mesa.mostrar_flop('kd','kh','ks')
 #            if not flop:
