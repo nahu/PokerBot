@@ -48,7 +48,6 @@ class Thread(threading.Thread):
         self.mesa.jugadores[self.jugador_actual].definir_jugada(jugada)
         
     def terminar(self):
-        sys.exit(0)
         self.term = True
         
 
@@ -624,12 +623,20 @@ def main():
                 print jug2
         
         '''Animaciones'''
+<<<<<<< HEAD
+        
+#        if repartida_manos:
+#            repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
+#            if not repartida_manos:
+#                flop = True
+=======
         if repartida_manos:
             #print 'yyy'
             repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
             if not repartida_manos:
                 flop = True
 
+>>>>>>> branch 'master' of ssh://git@github.com/nahu/PokerBot.git
 #        if flop:
 #            flop = mesa.mostrar_flop('kd','kh','ks')
 #            if not flop:
