@@ -13,7 +13,7 @@ from Mesa import Mesa
 
 FICHAS1 = 10000
 FICHAS2 = 10000
-CIEGAS = 100
+CIEGAS = 500
 P = 0.5
 
 class loco():
@@ -36,7 +36,7 @@ class PokerBot(object):
         '''
         
     def main(self):
-        jugador1 = Bot(1, FICHAS1, "Bot 1", P)
+        jugador1 = Bot(1, FICHAS1, "Bot 1", 0.1)
         jugador2 = Bot(2, FICHAS2, "bot 2", 0.1)
         mesa = Mesa(CIEGAS, [jugador1, jugador2], lock)
         

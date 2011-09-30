@@ -253,6 +253,7 @@ class Mesa(object):
                     self.bote+=self.ciega/2
                 else:
                     monto = self.jugadores[self.obtener_no_dealer()].apuesta_actual
+                    print self.jugadores
                     apuesta, self.allin =self.jugadores[jugador].igualar(monto) 
                     self.bote += apuesta
                     if self.allin:
