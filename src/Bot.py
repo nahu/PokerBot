@@ -64,7 +64,7 @@ class Bot(Jugador):
         ''' return Cerebro().elegir_accion(mano, comunitarias, ronda, dict_odds, dealer)
         dealer: true o false si es que soy o no dealer
         '''
-        print self.mano   
+        #print self.mano   
         return self.cerebro.elegir_accion(self.mano, comunitarias, ronda, self.calcular_odds(ronda, comunitarias), self.dealer)
          
     

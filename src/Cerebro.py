@@ -128,7 +128,7 @@ class Cerebro(object):
                             if i[0] == 0:#se tiene un juego formado y es bueno
                                 return 'apostar'
                             else:
-                                print (">>>>>>>> ",i[0])
+                                #print (">>>>>>>> ",i[0])
                                 dif = ronda.apuesta_de_ronda() - i[0] * ronda.monto_a_igualar(dealer)
     
                                 if dif > 0:
@@ -207,8 +207,8 @@ class Cerebro(object):
         poscición y por el valor de la jugada en la segunda.
         '''
         divisor = 20
-        print ">>>>>> ODDS:"
-        print dict_odd
+        #print ">>>>>> ODDS:"
+        ###print dict_odd
         buenos_odds = []
         for i in dict_odd.keys():
             if dict_odd[i][0]:
