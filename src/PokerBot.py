@@ -51,7 +51,7 @@ class PokerBot(object):
                 print "Jugada empatadora: ",resultado[2]
             
             print "------Estado final de mesa-----"
-            mesa.imprimir()
+            #mesa.imprimir()
             if not resultado[0]:#el juego terminó
                 print "El juego terminó"
                 break

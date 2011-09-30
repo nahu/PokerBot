@@ -29,12 +29,13 @@ class Jugador(object):
         self.esperar = False
     
     def imprimir(self):
-        print "   NOMBRE: ", self.nombre
-        print "   fichas: ", self.fichas
-        print "   mano: ", self.mano
-        print "   es bot: ", self.bot
-        print "   apuesta actual: ", self.apuesta_actual
-        print "   es dealer: ", self.dealer
+        ##print "   NOMBRE: ", self.nombre
+        ##print "   fichas: ", self.fichas
+        ##print "   mano: ", self.mano
+        ##print "   es bot: ", self.bot
+        ##print "   apuesta actual: ", self.apuesta_actual
+        ##print "   es dealer: ", self.dealer
+        pass
         
       
     def verificar_allin(self, apuesta):
@@ -81,34 +82,34 @@ class Jugador(object):
         if (self.fichas > monto):
             self.fichas -= monto
             self.apuesta_actual += monto
-            print "SUBIR / apuesta_nueva: " + str(monto)
+            ##print "SUBIR / apuesta_nueva: " + str(monto)
             return (monto, False)
         else:
             apuesta=self.fichas
             self.apuesta_actual += apuesta
             self.fichas = 0
-            print "SUBIR / apuesta_nueva: " + str(apuesta)
+            ##print "SUBIR / apuesta_nueva: " + str(apuesta)
             return (apuesta, True)
         
     def igualar(self, total):
-        print "igualar"
+        ##print "igualar"
         monto = 0
-        print "total: ", total
-        print "apuesta actual", self.apuesta_actual
+        ###print "total: ", total
+        ###print "apuesta actual", self.apuesta_actual
         if total>self.apuesta_actual:
-            print "dentro"
+            ###print "dentro"
             monto = total-self.apuesta_actual
-            print "monto: ", monto 
+            ###print "monto: ", monto 
             if (self.fichas > monto):
                 self.fichas -= monto
                 self.apuesta_actual += monto
-                print "IGUALAR / apuesta_nueva: " + str(monto)
+                ###print "IGUALAR / apuesta_nueva: " + str(monto)
                 return (monto, False)
             else:
                 apuesta = self.fichas
                 self.apuesta_actual += apuesta
                 self.fichas = 0
-                print "IGUALAR / all-in: " + str(apuesta)
+                #####print "IGUALAR / all-in: " + str(apuesta)
                 return (apuesta, True)
         if (self.apuesta_actual==total):
             return (0, False)
