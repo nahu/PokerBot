@@ -10,17 +10,17 @@ Creado el 23/09/2011
 '''
 
 
-import Jugador
-import Cerebro
-import HandEvaluator
-
+from Jugador import Jugador
+from Cerebro import Cerebro
+from HandEvaluator import HandEvaluator
+import random
 
 class Bot(Jugador):
     '''
     El bot extiende de un jugador, redefine los métodos del mismo
     '''
     
-    def __init__(self, identificador, fichas, nombre):
+    def __init__(self, identificador, fichas, nombre, p=0.5):
         '''
         Constructor del Bot
         '''
@@ -29,16 +29,18 @@ class Bot(Jugador):
         self.bot = True
         self.nombre = nombre
         self.fichas = fichas
-        self.cerebro = Cerebro()
-        self.fichas = fichas
         self.id = identificador
         self.mano = [None, None]
-        self.bot = True
         self.apuesta_actual = 0
         self.dealer = False
         self.jugada = None
         self.esperar = False
-    
+        self.p = p
+        
+    def inicializar_estrategia(self):
+        estrategia = self.establecer_estrategia(self.p)
+        self.cerebro = Cerebro(estrategia[0], estrategia[1])
+        
     def obtener_jugada(self, ronda, comunitarias):
         '''
         Dependiendo de la ronda hace lo que tiene que hacer
@@ -54,9 +56,6 @@ class Bot(Jugador):
         @return jugada : devuelve lo que tiene que hacer
         si es un jugador se obtiene de la pantalla
         si es un bot se calcula.
-        [ir(igualar), no_ir, aumentar, all_in, salir, pasar, mostrar, no_mostrar (en caso de ganar porque
-        el contrario se retirarse puede mostrar o no mostrar las cartas)]
-        
         
         @rtype: String
         '''
@@ -64,8 +63,8 @@ class Bot(Jugador):
         ''' return Cerebro().elegir_accion(mano, comunitarias, ronda, dict_odds, dealer)
         dealer: true o false si es que soy o no dealer
         '''
-        
-        return Cerebro().elegir_accion(self.mano, comunitarias, ronda, self.calcular_odds, self.dealer)
+        print self.mano   
+        return self.cerebro.elegir_accion(self.mano, comunitarias, ronda, self.calcular_odds(ronda, comunitarias), self.dealer)
          
     
     def calcular_odds(self, ronda, comunitarias):
@@ -74,7 +73,8 @@ class Bot(Jugador):
         odds={"carta alta":[None,True],"par":[None,True], "doble par":[None,True], "trio":[None,True], "escalera interna":[None,True], "escalera abierta":[None,True], 
               "color":[None, True], "full":[None,True], "poker":[None,True]}
 
-        numero,colores = self.hanEval.gobysificar(self.mano, comunitarias)
+        numero,colores = self.handEval.gobisificar(self.mano, comunitarias)
+        
         
         if ronda.tipo == 1:#solo en el pre-flop
             tipo = self.tiene_cartas_consecutivas()
@@ -99,6 +99,8 @@ class Bot(Jugador):
             odds["par"][0] = (6/cartas_restantes[ronda.tipo])-1
              
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+        print "numero:", numero
+        print "colores: ", colores
         tipo, jugada = self.handEval.comprobar_doble_par(numero,colores)
         if tipo:
             #tiene doble par
@@ -148,14 +150,15 @@ class Bot(Jugador):
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
         if (odds["escalera interna"][0]==0 or odds["escalera abierta"][0]==0) and odds["color"][0]==0:
             odds["escalera color"][0]=0
-             
-        self.comprobar_jugada_en_mesa(odds, comunitarias)
+        
+        if not ronda.tipo == 1:
+            self.comprobar_jugada_en_mesa(odds, comunitarias)
              
         return odds 
                     
     
     def comprobar_jugada_en_mesa(self,odds, comunitarias): 
-        numero,colores = self.handEval.gobysificar([],comunitarias)
+        numero,colores = self.handEval.gobisificar([],comunitarias)
         
         #comprobar par
         tipo,jugada = self.handEval.comprobar_par(numero,colores)
@@ -186,13 +189,7 @@ class Bot(Jugador):
         #comprobar poker
         tipo,jugada = self.handEval.comprobar_poker(numero,colores)
         if tipo:
-            odds["full"][1] = False
-        
-        
-        
-        
-        
-                  
+            odds["full"][1] = False               
                     
     def tiene_cartas_consecutivas(self):
         cartas={"1":1, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7, "8":8, "9":9, "d":10, "j":11, "q":12, "k":13}
@@ -221,5 +218,27 @@ class Bot(Jugador):
             return True
         return False
         
-        
+    def establecer_estrategia(self,numero):
+        aleatorio = random.random()
+        if numero < 0.9:
+            limite_superior = numero + 0.1
+        else:
+            limite_superior = 1
+        if numero > 0.1:
+            limite_inferior = numero - 0.1
+        else:
+            limite_inferior = 0
+        if limite_superior < 1:
+            rango_mentira = 1 - limite_superior
+        else:
+            rango_mentira = 0
+        if aleatorio < limite_inferior:
+            return (2,0)
+        if aleatorio >= limite_inferior and aleatorio <= limite_superior:
+            return (3,random.randint(1,4))
+        rango_mentira = rango_mentira / 4
+        for i in range(1,5):
+            if aleatorio <= limite_superior + rango_mentira*i:
+                return (1,i)
+         
     

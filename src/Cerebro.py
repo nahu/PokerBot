@@ -132,15 +132,15 @@ class Cerebro(object):
                                 dif = ronda.apuesta_de_ronda() - odd[i][0] * ronda.monto_a_igualar(dealer)
     
                                 if dif > 0:
-                                    if ronda.monto_a_subir() > dif * 2:
-                                    #si apuesto y me iguala y aún así sigo ganando algo según el odd
-                                        if ronda.nro_apuesta <= 2:   
-                                        #le subo hasta la 2da ronda 
-                                            return "apostar"
-                                        else:
-                                            return "igualar"
-                                    else:
-                                        return "igualar"
+#                                    if ronda.monto_a_subir() > dif * 2:
+#                                    #si apuesto y me iguala y aún así sigo ganando algo según el odd
+#                                        if ronda.nro_apuesta <= 2:   
+#                                        #le subo hasta la 2da ronda 
+#                                            return "apostar"
+#                                        else:
+#                                            return "igualar"
+#                                    else:
+                                    return "igualar"
                                 else:
                                     return "no_ir"
                         

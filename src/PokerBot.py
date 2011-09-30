@@ -8,9 +8,13 @@ Creado el Sep 27, 2011
 @author: Vanessa Jannete Cañete
 @author: Gabriela Gaona
 '''
-import Jugador
-import Mesa
+from Bot import Bot
+from Mesa2 import Mesa
 
+FICHAS1 = 10000
+FICHAS2 = 10000
+CIEGAS = 100
+P = 0.5
 class PokerBot(object):
     '''
     Clase principal del juego
@@ -23,9 +27,9 @@ class PokerBot(object):
         '''
         
     def main(self):
-        jugador1 = Jugador(1, nombre="PC", fichas=1000, bot=True)
-        jugador2 = Jugador(2, nombre="Pibe", fichas=1000)
-        mesa = Mesa(ciega=10, jugadores=[jugador1, jugador2])
+        jugador1 = Bot(1, nombre="PC", fichas=FICHAS1)
+        jugador2 = Bot(2, nombre="Pibe", fichas=FICHAS2)
+        mesa = Mesa(CIEGAS, [jugador1, jugador2], P)
         
         while True:
             resultado = mesa.juego()
@@ -33,8 +37,12 @@ class PokerBot(object):
             print "Jugada ganadora: " + resultado[2]
             
             if not resultado[0]:#el juego terminó
+                print "El juego terminó"
                 break
             
             
+
+a = PokerBot()
+
             
                 
