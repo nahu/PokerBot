@@ -35,7 +35,10 @@ class Bot(Jugador):
         self.dealer = False
         self.jugada = None
         self.esperar = False
-        estrategia = self.establecer_estrategia(p)
+        self.p = p
+        
+    def inicializar_estrategia(self):
+        estrategia = self.establecer_estrategia(self.p)
         self.cerebro = Cerebro(estrategia[0], estrategia[1])
         
     def obtener_jugada(self, ronda, comunitarias):
@@ -60,7 +63,7 @@ class Bot(Jugador):
         ''' return Cerebro().elegir_accion(mano, comunitarias, ronda, dict_odds, dealer)
         dealer: true o false si es que soy o no dealer
         '''
-        
+        print self.mano   
         return self.cerebro.elegir_accion(self.mano, comunitarias, ronda, self.calcular_odds(ronda, comunitarias), self.dealer)
          
     
@@ -71,6 +74,7 @@ class Bot(Jugador):
               "color":[None, True], "full":[None,True], "poker":[None,True]}
 
         numero,colores = self.handEval.gobisificar(self.mano, comunitarias)
+        
         
         if ronda.tipo == 1:#solo en el pre-flop
             tipo = self.tiene_cartas_consecutivas()
@@ -95,6 +99,8 @@ class Bot(Jugador):
             odds["par"][0] = (6/cartas_restantes[ronda.tipo])-1
              
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++  
+        print "numero:", numero
+        print "colores: ", colores
         tipo, jugada = self.handEval.comprobar_doble_par(numero,colores)
         if tipo:
             #tiene doble par

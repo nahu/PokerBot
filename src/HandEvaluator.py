@@ -378,6 +378,8 @@ class HandEvaluator(object):
         total = deepcopy(t)
         colores = deepcopy(c)
         mejor,jugada = self.comprobar_par(total,colores)
+        if len(total)<2:
+            return None,None
         if mejor != None:
             numero = jugada[0][0]
             indice = total.index(numero)

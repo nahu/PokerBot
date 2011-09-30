@@ -69,6 +69,12 @@ class Mesa(object):
         self.resultado = None
         self.poner_ciegas()
         self.jugador_actual = self.dealer
+        
+        #si es un bot vuelve a recalcular la estrategia
+        for jug in self.jugadores:
+            if jug.bot:
+                jug.inicializar_estrategia()
+                
         no_ir = False
         
         for tipo in range(1,5): #iterador de rondas
@@ -122,12 +128,15 @@ class Mesa(object):
     def ronda(self, tipo_ronda):
         #retorna si se continúa o no con la siguiente ronda
         resultado = "continuar"
-        
+#        self.jugadores[self.dealer].mano[0] = "9c"
+#        self.jugadores[self.dealer].mano[1] = "9d"
         while True:
             for i in range(0, self.nro_jugadores):
                 if not self.allin:
                     self.ronda_actual.pot = self.bote
                     jugada = self.jugadores[self.jugador_actual].obtener_jugada(self.ronda_actual, self.comunitarias)
+                    self.set_dibujar()
+                    self.esperar_dibujo()
                     resultado = self.evaluar_accion(jugada, self.jugador_actual)
                     if resultado != "continuar":
                         break
