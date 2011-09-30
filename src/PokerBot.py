@@ -33,8 +33,12 @@ class PokerBot(object):
         
         while True:
             resultado = mesa.juego()
-            print "Ganó el jugador" + mesa.jugadores[resultado[1]]
-            print "Jugada ganadora: " + resultado[2]
+            if resultado[1]:
+                print "Ganó el jugador" + str(mesa.jugadores[resultado[1]])
+                print "Jugada ganadora: " + resultado[2]
+            else:
+                print "empate"
+                print "Jugada empatadora: ",resultado[2]
             
             if not resultado[0]:#el juego terminó
                 print "El juego terminó"
