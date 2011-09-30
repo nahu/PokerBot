@@ -120,6 +120,7 @@ class Mesa(object):
            nombre de la jugada: 
            jugada: [], None'''
         jugador, nombre_jugada, cartas = HandEvaluator().ganador(self.comunitarias, self.jugadores[0].mano, self.jugadores[1].mano)
+        print "jugador hand eval........", jugador
         gana = None
         if jugador == "Jugador1" :
             gana = 0

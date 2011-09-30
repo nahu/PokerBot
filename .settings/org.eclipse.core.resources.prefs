@@ -1,4 +1,4 @@
-#Fri Sep 30 01:44:20 PYT 2011
+#Fri Sep 30 04:12:40 PYT 2011
 eclipse.preferences.version=1
 encoding//src/Bot.py=utf-8
 encoding//src/Cerebro.py=utf-8
@@ -7,5 +7,5 @@ encoding//src/HandEvaluator.py=utf-8
 encoding//src/Jugador.py=utf-8
 encoding//src/Mazo.py=utf-8
 encoding//src/Mesa.py=utf-8
+encoding//src/Mesa2.py=utf-8
 encoding//src/Ronda.py=utf-8
-
