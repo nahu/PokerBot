@@ -72,11 +72,13 @@ class Jugador(object):
         if (self.fichas > monto):
             self.fichas -= monto
             self.apuesta_actual += monto
+            print "Subir apuesta: " + str(self.apuesta_actual)
             return (monto, False)
         else:
             apuesta=self.fichas
-            self.apuesta_actua += apuesta
+            self.apuesta_actual += apuesta
             self.fichas = 0
+            print "Subir apuesta: " + str(self.apuesta_actual)
             return (apuesta, True)
         
     def igualar(self, total):
@@ -86,11 +88,13 @@ class Jugador(object):
         if (self.fichas > monto):
             self.fichas -= monto
             self.apuesta_actual += monto
+            print "IGUALAR: " + str(self.apuesta_actual)
             return (monto, False)
         else:
             apuesta = self.fichas
             self.apuesta_actua += apuesta
             self.fichas = 0
+            print "IGUALAR: " + str(self.apuesta_actual)
             return (apuesta, True)
 
     def dibujar_botones(self):
