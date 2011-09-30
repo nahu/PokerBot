@@ -27,7 +27,15 @@ class Jugador(object):
         self.lock = lock
         self.jugada = None
         self.esperar = False
+    
+    def imprimir(self):
+        print "   fichas: ", self.fichas
+        print "   mano: ", self.mano
+        print "   es bot: ", self.bot
+        print "   apuesta actual: ", self.apuesta_actual
+        print "   es dealer: ", self.dealer
         
+      
     def verificar_allin(self, apuesta):
         if (apuesta > self.fichas):
             return True

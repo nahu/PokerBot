@@ -79,11 +79,11 @@ class Bot(Jugador):
         if ronda.tipo == 1:#solo en el pre-flop
             tipo = self.tiene_cartas_consecutivas()
             if tipo:
-                    odds["escalera interna"][0] = (12/cartas_restantes[ronda.tipo])-1
-                    odds["escalera abierta"][0] = (12/cartas_restantes[ronda.tipo])-1
+                    odds["escalera interna"][0] = (cartas_restantes[ronda.tipo]/12)-1
+                    odds["escalera abierta"][0] = (cartas_restantes[ronda.tipo]/12)-1
                     
             if self.tiene_cartas_del_mismo_color():
-                    odds["color"][0]=(11/cartas_restantes[ronda.tipo])-1
+                    odds["color"][0]=(cartas_restantes[ronda.tipo]/11)-1
         
         if self.tiene_carta_alta():
             odds["carta alta"][0]=0
@@ -92,11 +92,12 @@ class Bot(Jugador):
         tipo, jugada = self.handEval.comprobar_par(numero,colores)
           
         if tipo: #tiene par
-            odds["trio"][0] = (2/cartas_restantes[ronda.tipo])-1
-            odds["doble par"][0]= (3/cartas_restantes[ronda.tipo])-1
+
+            odds["trio"][0] = (cartas_restantes[ronda.tipo]/2)-1
+            odds["doble par"][0]= (cartas_restantes[ronda.tipo]/3)-1
             odds["par"][0]=0
         else: #no tiene par
-            odds["par"][0] = (6/cartas_restantes[ronda.tipo])-1
+            odds["par"][0] = (cartas_restantes[ronda.tipo]/6)-1
              
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++  
         print "numero:", numero
@@ -105,7 +106,7 @@ class Bot(Jugador):
         if tipo:
             #tiene doble par
             odds["doble par"][0]=0
-            odds["full"][0]= (4/cartas_restantes[ronda.tipo])-1
+            odds["full"][0]= (cartas_restantes[ronda.tipo]/4)-1
             
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
         tipo, jugada = self.handEval.comprobar_trio(numero,colores)
@@ -122,10 +123,10 @@ class Bot(Jugador):
                 odds["escalera interna"][0]=0     
         else:#no tiene escalera
             if self.handEval.posible_escalera_abierta(numero,colores):
-                odds["escalera abierta"][0]= (8/cartas_restantes[ronda.tipo])-1
+                odds["escalera abierta"][0]= (cartas_restantes[ronda.tipo]/8)-1
             else:
                 if self.handEval.posible_escalera_interna(numero,colores):
-                    odds["escalera interna"][0] = (4/cartas_restantes[ronda.tipo])-1
+                    odds["escalera interna"][0] = (cartas_restantes[ronda.tipo]/4)-1
                     
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
         tipo,jugada = self.handEval.comprobar_color(numero,colores)
@@ -135,7 +136,7 @@ class Bot(Jugador):
             odds["color"][0]= 0
         else:
             if self.handEval.posible_color(numero,colores):
-                odds["color"][0]= (9/cartas_restantes[ronda.tipo])-1
+                odds["color"][0]= (cartas_restantes[ronda.tipo]/9)-1
         
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++               
         tipo,jugada = self.handEval.comprobar_full(numero, colores)
