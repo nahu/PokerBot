@@ -132,36 +132,131 @@ class HandEvaluator(object):
         if orden.index(nombre_jugada1) < orden.index(nombre_jugada2):
             return "Jugador2",nombre_jugada2,jugada2
         if orden.index(nombre_jugada1) == orden.index(nombre_jugada2):
-            if nombre_jugada1 == "carta alta" or nombre_jugada1 == "par" or nombre_jugada1 == "trio" or nombre_jugada1 == "poker":
+            
+            if nombre_jugada1 == "carta alta" or nombre_jugada1 == "par" or nombre_jugada1 == "trio":
                 if peso.index(jugada1[0][0]) > peso.index(jugada2[0][0]):
                     return "Jugador1",nombre_jugada1,jugada1
                 if peso.index(jugada1[0][0]) < peso.index(jugada2[0][0]):
                     return "Jugador2",nombre_jugada2,jugada2
-                if peso.index(jugada1[0][0]) == peso.index(jugada2[0][0]):
+                valores1 = self.desempate(jugada1, mano1)
+                valores2 = self.desempate(jugada2, mano2)
+                if valores1 == False and valores2 != False:
+                    return "Jugador2",nombre_jugada2,jugada2
+                if valores2 == False and valores1 != False:
+                    return "Jugador1",nombre_jugada1,jugada1
+                if valores2 == False and valores1 == False:
                     return "Empate",nombre_jugada1,None
+                if peso.index(valores1[0][0]) > peso.index(valores2[0][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(valores1[0][0]) < peso.index(valores2[0][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                if valores1[1] == False and valores2[1] != False:
+                    return "Jugador2",nombre_jugada2,jugada2
+                if valores1[1] != False and valores2[1] == False:
+                    return "Jugador1",nombre_jugada1,jugada1
+                if valores1[1] == False and valores2[1] == False:
+                    return "Empate",nombre_jugada1,None
+                if peso.index(valores1[1][0]) > peso.index(valores2[1][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(valores1[1][0]) < peso.index(valores2[1][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                return "Empate",nombre_jugada1,None
+            
+            if nombre_jugada1 == "poker":
+                if peso.index(jugada1[0][0]) > peso.index(jugada2[0][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[0][0]) < peso.index(jugada2[0][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                valores1 = self.desempate(jugada1, mano1)
+                valores2 = self.desempate(jugada2, mano2)
+                if valores1 == False and valores2 != False:
+                    return "Jugador2",nombre_jugada2,jugada2
+                if valores2 == False and valores1 != False:
+                    return "Jugador1",nombre_jugada1,jugada1
+                if valores2 == False and valores1 == False:
+                    return "Empate",nombre_jugada1,None
+                if peso.index(valores1[0][0]) > peso.index(valores2[0][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(valores1[0][0]) < peso.index(valores2[0][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                return "Empate",nombre_jugada1,None
+            
+            if nombre_jugada1 == "doble par":
+                if peso.index(jugada1[3][0]) > peso.index(jugada2[3][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[3][0]) < peso.index(jugada2[3][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                if peso.index(jugada1[0][0]) > peso.index(jugada2[0][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[0][0]) < peso.index(jugada2[0][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                valores1 = self.desempate(jugada1, mano1)
+                valores2 = self.desempate(jugada2, mano2)
+                if valores1 == False and valores2 != False:
+                    return "Jugador2",nombre_jugada2,jugada2
+                if valores2 == False and valores1 != False:
+                    return "Jugador1",nombre_jugada1,jugada1
+                if valores2 == False and valores1 == False:
+                    return "Empate",nombre_jugada1,None
+                if peso.index(valores1[0][0]) > peso.index(valores2[0][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(valores1[0][0]) < peso.index(valores2[0][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                return "Empate",nombre_jugada1,None
+            
             if nombre_jugada1 == "color":
+                if peso.index(jugada1[4][0]) > peso.index(jugada2[4][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[4][0]) < peso.index(jugada2[4][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                if peso.index(jugada1[3][0]) > peso.index(jugada2[3][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[3][0]) < peso.index(jugada2[3][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                if peso.index(jugada1[2][0]) > peso.index(jugada2[2][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[2][0]) < peso.index(jugada2[2][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                if peso.index(jugada1[1][0]) > peso.index(jugada2[1][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[1][0]) < peso.index(jugada2[1][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                if peso.index(jugada1[0][0]) > peso.index(jugada2[0][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[0][0]) < peso.index(jugada2[0][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                return "Empate",nombre_jugada1,None
+            
+            if nombre_jugada1 == "full":
+                if peso.index(jugada1[0][0]) > peso.index(jugada2[0][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[0][0]) < peso.index(jugada2[0][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                if peso.index(jugada1[4][0]) > peso.index(jugada2[4][0]):
+                    return "Jugador1",nombre_jugada1,jugada1
+                if peso.index(jugada1[4][0]) < peso.index(jugada2[4][0]):
+                    return "Jugador2",nombre_jugada2,jugada2
+                "Empate",nombre_jugada1,None
+                
+            if nombre_jugada1 == "escalera" or nombre_jugada1 == "escalera color":
                 if peso.index(jugada1[3][0]) > peso.index(jugada2[3][0]):
                     return "Jugador1",nombre_jugada1,jugada1
                 if peso.index(jugada1[3][0]) < peso.index(jugada2[3][0]):
                     return "Jugador2",nombre_jugada2,jugada2
                 if peso.index(jugada1[3][0]) == peso.index(jugada2[3][0]):
                     return "Empate",nombre_jugada1,None
-            if nombre_jugada1 == "full" or nombre_jugada1 == "doble par" or nombre_jugada1 == "escalera" or nombre_jugada1 == "escalera color":
-                if peso.index(jugada1[3][0]) > peso.index(jugada2[3][0]):
-                    return "Jugador1",nombre_jugada1,jugada1
-                if peso.index(jugada1[3][0]) < peso.index(jugada2[3][0]):
-                    return "Jugador2",nombre_jugada2,jugada2
-                if peso.index(jugada1[3][0]) == peso.index(jugada2[3][0]):
-                    return "Empate",nombre_jugada1,None
-            if nombre_jugada1 == "escalera real":
+                
+            if nombre_jugada1 == "escalera real" or nombre_jugada1 == "poker":
                 return "Empate",nombre_jugada1,None
             
                 
         
         
-    def mejor_en_mano(self, comunitarias, cartas):
+    def mejor_en_mano(self, com, car):
         orden = ["carta alta","par","doble par","trio","escalera","color","full","poker","escalera color","escalera real"]
         #peso = ["123456789djqx1"]
+        comunitarias = deepcopy(com)
+        cartas = deepcopy(car)
         while comunitarias.count(None)>0 :
             comunitarias.remove(None)
         total = cartas + comunitarias
@@ -234,7 +329,7 @@ class HandEvaluator(object):
     def comprobar_escalera(self,total,c):
         #retorna una lista donde cada elemento es un string que indica el numero que forma la escalera, y una 
         #segunda lista de strings donde cada elemento indica el color del numero que forma la escalera 
-        if len(total)<4:
+        if len(total)<5:
             return None,None
         peso = "123456789djqx1"
         colores = deepcopy(c)
@@ -254,7 +349,7 @@ class HandEvaluator(object):
             i = i+1
             j = 0
             subcadena_numeros = ""
-            for j in range (i,i+4):
+            for j in range (i,i+5):
                 subcadena_numeros = subcadena_numeros + total2[j]                 
             
             if peso.find(subcadena_numeros) > -1 :
@@ -264,29 +359,29 @@ class HandEvaluator(object):
                 jugada = []
                 colors = []
                 for color in colores[i]:
-                    if colores[i+1].count(color)>0 and colores[i+2].count(color)>0 and colores[i+3].count(color)>0:
+                    if colores[i+1].count(color)>0 and colores[i+2].count(color)>0 and colores[i+3].count(color)>0 and colores[i+4].count(color)>0:
                         print "Escalera color encontrada"
                         escalera_color = True
                         color_comun = color
                 if escalera_color == True:
-                    for j in range (i , i+4):
+                    for j in range (i , i+5):
                         jugada.append(total2[j]) 
                     colors = [[color_comun], [color_comun],[color_comun],[color_comun]]
                     retorno = self.lista_retorno(jugada, colors)
                     escalera_color_asegurada = True
                 else:
                     if escalera_color_asegurada == False:
-                        for j in range (i,i+4):
+                        for j in range (i,i+5):
                             jugada.append(total2[j])   
                             colors.append([colores[j][0]])     
                         retorno = self.lista_retorno(jugada, colors)  
-            if i + 4 > len(total2) - 1:
+            if i + 5 > len(total2) - 1:
                 bandera = 1
                 
                 
         escalera_real = False
         if encontrado == True:
-            if retorno[0][0] == "j" and escalera_color_asegurada == True:
+            if retorno[0][0] == "d" and escalera_color_asegurada == True:
                 escalera_real = True
             if escalera_real == True:
                 return "escalera real",retorno
@@ -369,10 +464,7 @@ class HandEvaluator(object):
         if par != None:
             trio, jugada_trio = self.comprobar_trio(t,c)
             if trio != None:
-                if peso.index(jugada_par[0][0]) > peso.index(jugada_trio[0][0]):
                     return "full",jugada_trio + jugada_par
-                else:
-                    return "full",jugada_par + jugada_trio
         return None,None
     def comprobar_doble_par(self,t,c):
         total = deepcopy(t)
@@ -410,10 +502,10 @@ class HandEvaluator(object):
                 if colores[i].count(color)>0:
                     contador = contador + 1
                     jugada.append(total[i] + color)
-            if len(jugada) == 4:
+            if len(jugada) == 5:
                 return "color", jugada
-            if len(jugada) > 4:
-                while len(jugada) > 4:
+            if len(jugada) > 5:
+                while len(jugada) > 5:
                     jugada.pop(0)
                 return "color",jugada
         return None, None
@@ -432,7 +524,7 @@ class HandEvaluator(object):
             total2.pop(0)
             #total2.append(total2[0])
             #colores.append(colores[0])
-        if len(total2)<3:
+        if len(total2)<4:
             return False
         bandera = 0
         i = -1
@@ -440,19 +532,19 @@ class HandEvaluator(object):
             i = i+1
             j = 0
             subcadena_numeros = ""
-            for j in range (i,i+3):
+            for j in range (i,i+4):
                 subcadena_numeros = subcadena_numeros + total2[j]                 
             
             if peso.find(subcadena_numeros) > -1 and total2[0]!="1" and total2[len(total2)-1]!="1":
                 return True
-            if i + 3 > len(total2) - 1:
+            if i + 4 > len(total2) - 1:
                 bandera = 1
         return False
     
     def posible_escalera_interna(self,t,c):
         #colores = deepcopy(c)
         total2 = deepcopy(t)
-        if len(total2)<3:
+        if len(total2)<4:
             return False
         if total2[0] == "1":
             total2.append(total2[0])
@@ -469,7 +561,7 @@ class HandEvaluator(object):
             for i in range(14):
                 encontrados[i] = "0"
             i = 0
-            for j in range (i,i+3):
+            for j in range (i,i+4):
                 #print j
                 subcadena_numeros = subcadena_numeros + total2[j]
             for char in subcadena_numeros:
@@ -478,14 +570,14 @@ class HandEvaluator(object):
             if encontrados[0] == "1":
                 encontrados[13] = "1"
                 
-            for i in range(11):
+            for i in range(10):
                 contador = 0
-                for j in range(4):
+                for j in range(5):
                     if encontrados[i+j] == "1":
                         contador = contador + 1
-                if contador == 3:
+                if contador == 4:
                     return True
-            if i + 3 > len(total2) - 1:
+            if i + 4 > len(total2) - 1:
                 bandera = 1
         return False
     
@@ -499,7 +591,7 @@ class HandEvaluator(object):
             for i in range(len(colores)):
                 if colores[i].count(color)>0:
                     contador = contador + 1
-            if contador == 3:
+            if contador == 4:
                 return True
         return False
     
@@ -561,7 +653,52 @@ class HandEvaluator(object):
         #        carta.replace("k","x")
         return total
             
-            
+    def desempate(self, j, m):
+        mano = deepcopy(m)
+        jugada = deepcopy(j)
+        self.arreglar(jugada)
+        self.arreglar(mano)
+        bandera = 0
+        retorno = []
+        for carta in jugada:
+            if carta[0] == mano[0][0]:
+                bandera = 1
+        bandera2 = 0
+        for carta in jugada:
+            if carta[0] == mano[1][0]:
+                bandera2 = 1
+        if bandera == 1 and bandera2 == 1:
+            return False
+        agregado1 = False
+        agregado2 = False
+        ordenar = True
+        if bandera == 0 and mano[0][0] == "1":
+            retorno.append(mano[0])
+            agregado1 = True
+            ordenar = False
+        if bandera == 0 and mano[1][0] == "1":
+            retorno.append(mano[1])
+            agregado2 = True
+            ordenar = False
+        if agregado1 == False and bandera == 0:
+            retorno.append(mano[0])
+        if agregado2 == False and bandera2 == 0:
+            retorno.append(mano[1])
+        if ordenar == True:
+            retorno.sort()
+        retorno = self.normalizar(retorno)
+        if len(retorno) == 1:
+            retorno.append(False)
+        print "Retorno de desempate: ", retorno
+        return retorno
+        
+
+        
+        
+        
+        
+        
+        
             
         
         

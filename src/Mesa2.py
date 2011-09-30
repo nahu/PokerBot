@@ -120,6 +120,7 @@ class Mesa(object):
            nombre de la jugada: 
            jugada: [], None'''
         jugador, nombre_jugada, cartas = HandEvaluator().ganador(self.comunitarias, self.jugadores[0].mano, self.jugadores[1].mano)
+        print "jugador hand eval........", jugador
         gana = None
         if jugador == "Jugador1" :
             gana = 0
@@ -175,8 +176,9 @@ class Mesa(object):
         #descontar al jugador!
         #si fin apuestas de la ronda > fin_ronda
         #si no_ir > fin_juego
-        #si igualan las apuestas y se pasa > fin_ronda        
-        if jugada=="no ir":
+        #si igualan las apuestas y se pasa > fin_ronda 
+        print "JUGADA: ", jugada          
+        if jugada=="no_ir":
             print "+++++++accion: se fue"
             return "fin_juego"
         accion = ''
@@ -311,6 +313,7 @@ class Mesa(object):
           
     def poner_ciegas(self):
         self.bote = 0
+        print "BOTE INICIAL: ", self.bote
         #el dealer pone la ciega chica.
         if self.jugadores[self.dealer].verificar_allin(self.ciega/2):
             self.establecer_allin(self.dealer)

@@ -29,6 +29,7 @@ class Jugador(object):
         self.esperar = False
     
     def imprimir(self):
+        print "   NOMBRE: ", self.nombre
         print "   fichas: ", self.fichas
         print "   mano: ", self.mano
         print "   es bot: ", self.bot
@@ -90,24 +91,33 @@ class Jugador(object):
             return (apuesta, True)
         
     def igualar(self, total):
+        print "igualar"
         monto = 0
+        print "total: ", total
+        print "apuesta actual", self.apuesta_actual
         if total>self.apuesta_actual:
+            print "dentro"
             monto = total-self.apuesta_actual
+            print "monto: ", monto 
+            if (self.fichas > monto):
+                self.fichas -= monto
+                self.apuesta_actual += monto
+                print "IGUALAR / apuesta_nueva: " + str(monto)
+                return (monto, False)
+            else:
+                apuesta = self.fichas
+                self.apuesta_actual += apuesta
+                self.fichas = 0
+                print "IGUALAR / all-in: " + str(apuesta)
+                return (apuesta, True)
         if (self.apuesta_actual==total):
-            return 0,False
-        if (self.fichas > monto and monto != 0):
-            self.fichas -= monto
-            self.apuesta_actual += monto
-            print "IGUALAR / apuesta_nueva: " + str(monto)
-            return (monto, False)
+            return (0, False)
         else:
-            apuesta = self.fichas
-            self.apuesta_actual += apuesta
-            self.fichas = 0
-            print "IGUALAR / apuesta_nueva: " + str(monto)
-            return (apuesta, True)
+            return (0,False)
 
     def dibujar_botones(self):
         return self.esperar
         
-        
+    def cerar_apuesta(self):
+        self.apuesta_actual = 0
+           

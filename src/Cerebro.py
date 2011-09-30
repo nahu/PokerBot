@@ -206,12 +206,13 @@ class Cerebro(object):
         ordena de menor a mayor por valor del odd en la primera
         poscición y por el valor de la jugada en la segunda.
         '''
+        divisor = 20
         print ">>>>>> ODDS:"
         print dict_odd
         buenos_odds = []
         for i in dict_odd.keys():
             if dict_odd[i][0]:
-                buenos_odds.append([dict_odd[i][0], JUEGOS[i], i])
+                buenos_odds.append([dict_odd[i][0]/divisor, JUEGOS[i], i])
         buenos_odds.sort()
         return buenos_odds        
         
