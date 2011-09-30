@@ -177,6 +177,7 @@ class Mesa(object):
         #si no_ir > fin_juego
         #si igualan las apuestas y se pasa > fin_ronda        
         if jugada=="no ir":
+            print "+++++++accion: se fue"
             return "fin_juego"
         accion = ''
         #PRE FLOP
@@ -236,6 +237,7 @@ class Mesa(object):
             monto = self.jugadores[contrario].apuesta_actual
             if jugada=="igualar":
                 if self.apuestas_igualadas(): #puede terminar la ronda (el no dealer)
+                    print "+++++++accion: fin ronda - pasaron"
                     return "fin_ronda"
                 else:
                     apuesta, self.allin = self.jugadores[jugador].igualar(monto)
@@ -262,6 +264,7 @@ class Mesa(object):
         if jugada=="igualar":
             if self.apuestas_igualadas():
                 if self.es_dealer(jugador): #puede terminar la ronda
+                    print "+++++++accion: fin ronda - pasaron"
                     return "fin_ronda"
                 else:
                     return "continuar"
@@ -308,21 +311,18 @@ class Mesa(object):
           
     def poner_ciegas(self):
         self.bote = 0
-        #self.bote = self.ciega + self.ciega * 2
         #el dealer pone la ciega chica.
         if self.jugadores[self.dealer].verificar_allin(self.ciega/2):
             self.establecer_allin(self.dealer)
         else:
-            print "ciega: ", self.ciega
-            print "fichas: ", self.jugadores[self.dealer].fichas
-            self.jugadores[self.dealer].fichas -= self.ciega / 2
-            self.jugadores[self.dealer].apuesta_actual = self.ciega / 2
+            apuesta, self.allin = self.jugadores[self.dealer].subir_apuesta(self.ciega/2)
+            self.bote += apuesta
         #el otro pone la ciega grande.
         if self.jugadores[self.obtener_no_dealer()].verificar_allin(self.ciega):
             self.establecer_allin(self.obtener_no_dealer())
         else:
-            self.jugadores[self.obtener_no_dealer()].fichas -= self.ciega
-            self.jugadores[self.obtener_no_dealer()].apuesta_actual = self.ciega
+            apuesta, self.allin = self.jugadores[self.obtener_no_dealer()].subir_apuesta(self.ciega)
+            self.bote += apuesta
  
     def establecer_allin(self, jugador):
         self.allin = True   
