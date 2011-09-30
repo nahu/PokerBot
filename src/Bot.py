@@ -79,24 +79,25 @@ class Bot(Jugador):
         if ronda.tipo == 1:#solo en el pre-flop
             tipo = self.tiene_cartas_consecutivas()
             if tipo:
-                    odds["escalera interna"][0] = (12/cartas_restantes[ronda.tipo])-1
-                    odds["escalera abierta"][0] = (12/cartas_restantes[ronda.tipo])-1
+                    odds["escalera interna"].insert(0,(cartas_restantes[ronda.tipo]/12)-1)
+                    odds["escalera abierta"].insert(0,(cartas_restantes[ronda.tipo]/12)-1)
                     
             if self.tiene_cartas_del_mismo_color():
-                    odds["color"][0]=(11/cartas_restantes[ronda.tipo])-1
+                    odds["color"].insert(0,(cartas_restantes[ronda.tipo]/11)-1)
         
         if self.tiene_carta_alta():
-            odds["carta alta"][0]=0
+            odds["carta alta"].insert(0,0)
         
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++  
         tipo, jugada = self.handEval.comprobar_par(numero,colores)
           
         if tipo: #tiene par
-            odds["trio"][0] = (2/cartas_restantes[ronda.tipo])-1
-            odds["doble par"][0]= (3/cartas_restantes[ronda.tipo])-1
-            odds["par"][0]=0
+
+            odds["trio"].insert(0,(cartas_restantes[ronda.tipo]/2)-1)
+            odds["doble par"].insert(0, (cartas_restantes[ronda.tipo]/3)-1)
+            odds["par"].insert(0,0)
         else: #no tiene par
-            odds["par"][0] = (6/cartas_restantes[ronda.tipo])-1
+            odds["par"].insert(0,(cartas_restantes[ronda.tipo]/6)-1)
              
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++  
         print "numero:", numero
@@ -104,52 +105,52 @@ class Bot(Jugador):
         tipo, jugada = self.handEval.comprobar_doble_par(numero,colores)
         if tipo:
             #tiene doble par
-            odds["doble par"][0]=0
-            odds["full"][0]= (4/cartas_restantes[ronda.tipo])-1
+            odds["doble par"].insert(0,0)
+            odds["full"].insert(0,(cartas_restantes[ronda.tipo]/4)-1)
             
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
         tipo, jugada = self.handEval.comprobar_trio(numero,colores)
         if tipo:
             #tiene trio
-            odds["trio"][0]= 0
-            odds["full"][0]=(cartas_restantes[ronda.tipo]/3)-1
-            odds["poker"][0] = (cartas_restantes[ronda.tipo]/1)-1
+            odds["trio"].insert(0,0)
+            odds["full"].insert(0,(cartas_restantes[ronda.tipo]/3)-1)
+            odds["poker"].insert(0,(cartas_restantes[ronda.tipo]/1)-1)
             
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
         tipo, jugada = self.handEval.comprobar_escalera(numero,colores)
         if tipo: #tiene Escalera
-                odds["escalera abierta"][0]=0
-                odds["escalera interna"][0]=0     
+                odds["escalera abierta"].insert(0,0)
+                odds["escalera interna"].insert(0,0)     
         else:#no tiene escalera
             if self.handEval.posible_escalera_abierta(numero,colores):
-                odds["escalera abierta"][0]= (8/cartas_restantes[ronda.tipo])-1
+                odds["escalera abierta"].insert(0,(cartas_restantes[ronda.tipo]/8)-1)
             else:
                 if self.handEval.posible_escalera_interna(numero,colores):
-                    odds["escalera interna"][0] = (4/cartas_restantes[ronda.tipo])-1
+                    odds["escalera interna"].insert(0,(cartas_restantes[ronda.tipo]/4)-1)
                     
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
         tipo,jugada = self.handEval.comprobar_color(numero,colores)
         
         if tipo:
             #tiene color
-            odds["color"][0]= 0
+            odds["color"].insert(0,0)
         else:
             if self.handEval.posible_color(numero,colores):
-                odds["color"][0]= (9/cartas_restantes[ronda.tipo])-1
+                odds["color"].insert(0,(cartas_restantes[ronda.tipo]/9)-1)
         
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++               
         tipo,jugada = self.handEval.comprobar_full(numero, colores)
         if tipo:
-            odds["full"][0]=0
+            odds["full"].insert(0,0)
         
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
         tipo, jugada = self.handEval.comprobar_poker(numero,colores)
         if tipo:
-            odds["poker"][0]=0    
+            odds["poker"].insert(0,0)
        
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
         if (odds["escalera interna"][0]==0 or odds["escalera abierta"][0]==0) and odds["color"][0]==0:
-            odds["escalera color"][0]=0
+            odds["escalera color"].insert(0,0)
         
         if not ronda.tipo == 1:
             self.comprobar_jugada_en_mesa(odds, comunitarias)

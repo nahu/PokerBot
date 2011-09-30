@@ -9,7 +9,7 @@ Creado el Sep 27, 2011
 @author: Gabriela Gaona
 '''
 from Bot import Bot
-from Mesa2 import Mesa
+from MesaVane import Mesa
 
 FICHAS1 = 10000
 FICHAS2 = 10000
@@ -27,9 +27,9 @@ class PokerBot(object):
         '''
         
     def main(self):
-        jugador1 = Bot(1, nombre="PC", fichas=FICHAS1)
-        jugador2 = Bot(2, nombre="Pibe", fichas=FICHAS2)
-        mesa = Mesa(CIEGAS, [jugador1, jugador2], P)
+        jugador1 = Bot(1, FICHAS1, "jugador1", P)
+        jugador2 = Bot(2, FICHAS2, "bot2", P)
+        mesa = Mesa(CIEGAS, [jugador1, jugador2])
         
         while True:
             resultado = mesa.juego()
@@ -43,6 +43,7 @@ class PokerBot(object):
             
 
 a = PokerBot()
+a.main()
 
             
                 

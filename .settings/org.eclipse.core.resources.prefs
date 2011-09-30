@@ -1,12 +1,11 @@
-#Thu Sep 29 23:02:52 PYT 2011
-=\=\=\=\=\=\=
-<<<<<<<=HEAD
->>>>>>>=branch 'master' of ssh\://git@github.com/nahu/PokerBot.git
+#Fri Sep 30 00:04:19 PYT 2011
 eclipse.preferences.version=1
 encoding//src/Bot.py=utf-8
+encoding//src/Jugador.py=utf-8
+encoding//src/Mesa.py=utf-8
+eclipse.preferences.version=1
 encoding//src/Cerebro.py=utf-8
 encoding//src/GUI-2.py=utf-8
-encoding//src/GUI.py=utf-8
 encoding//src/HandEvaluator.py=utf-8
 encoding//src/Jugador.py=utf-8
 encoding//src/Mazo.py=utf-8
@@ -15,3 +14,4 @@ encoding//src/Mesa2.py=utf-8
 encoding//src/PokerBot.py=utf-8
 encoding//src/Ronda.py=utf-8
 encoding//src/readme=UTF-8
+
