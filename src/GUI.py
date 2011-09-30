@@ -155,13 +155,17 @@ class JugadorGUI():
         self.boton_subir_apuesta = Boton("subir_apuesta", px, py+70)
                
     
-    def cartas_al_maso(self):
+    def cartas_al_maso(self):    
+        
         self.carta1.rect.centerx = WIDTH/4 
         self.carta1.rect.centery = HEIGHT/2
         
         self.carta2.rect.centerx = WIDTH/4 
         self.carta2.rect.centery = HEIGHT/2
-    
+        
+        self.carta1.image = load_image("imagenes/cartas/b.gif", True)
+        self.carta2.image = load_image("imagenes/cartas/b.gif", True)
+        
     def set_cartas(self,carta1,carta2):
         self.carta1.value = carta1
         self.carta2.value = carta2
@@ -211,18 +215,24 @@ class MesaGUI():
         self.carta5 = Carta('b', WIDTH/4, HEIGHT/2)
         
     def cartas_al_maso(self):
+        
+        self.carta1.image = load_image("imagenes/cartas/b.gif", True)
         self.carta1.rect.centerx = WIDTH/4 
         self.carta1.rect.centery = HEIGHT/2
         
+        self.carta2.image = load_image("imagenes/cartas/b.gif", True)
         self.carta2.rect.centerx = WIDTH/4 
         self.carta2.rect.centery = HEIGHT/2
         
+        self.carta3.image = load_image("imagenes/cartas/b.gif", True)
         self.carta3.rect.centerx = WIDTH/4 
         self.carta3.rect.centery = HEIGHT/2
         
+        self.carta4.image = load_image("imagenes/cartas/b.gif", True)
         self.carta4.rect.centerx = WIDTH/4 
         self.carta4.rect.centery = HEIGHT/2
         
+        self.carta5.image = load_image("imagenes/cartas/b.gif", True)
         self.carta5.rect.centerx = WIDTH/4 
         self.carta5.rect.centery = HEIGHT/2
 
@@ -349,6 +359,15 @@ def actualizar_jugador(jugador1, jugador2, hilo ):
            
     
 def repartir_manos(repartida, jugador1, jugador2, cartas_abiertas):
+#    if jugador1.carta1.image != jugador1.carta1.back_img:
+#        jugador1.carta1.image = jugador1.carta1.back_img
+#    if jugador1.carta2.image != jugador1.carta2.back_img:
+#        jugador1.carta2.image = jugador1.carta2.back_img
+#    if jugador2.carta1.image != jugador2.carta1.back_img:
+#        jugador2.carta1.image = jugador2.carta1.back_img
+#    if jugador2.carta2.image != jugador2.carta2.back_img:
+#        jugador2.carta2.image = jugador2.carta2.back_img    
+    
     repartida = [False,False,False,False]
     repartida[0] = jugador2.get_cartas()[0].repartir(583, 108)
     if repartida[0]:
@@ -470,13 +489,16 @@ def main():
         
         if hilo.mesa.dibujar:
             if hilo.mesa.ronda_actual.tipo == 1:
-                print 'Entro Ronda 1' 
-                
-                if mano_nueva == True:
+                if river_terminado:
                     jugador1.cartas_al_maso()
                     jugador2.cartas_al_maso()
                     mesa.cartas_al_maso()
+                    river_terminado = False
+
+                print 'Entro Ronda 1' 
                 
+                if mano_nueva == True:
+                    pass
                 actualizar_jugador(jugador1, jugador2, hilo )
                 
                 if jugador1.dealer:
@@ -625,8 +647,6 @@ def main():
 #                print ('mesa bote: ', hilo.mesa.bote)
                 
                 hilo.dibujado()
-            
-            print hilo.mesa.resultado
             if hilo.mesa.resultado != None:
                 if not hilo.mesa.resultado[0]:
                     mano_nueva = True
@@ -641,7 +661,6 @@ def main():
                         dibujar_ganador2 = True
                         jugador1.set_ganador('Empate')
                         jugador2.set_ganador('Empate')
-                        
                         
                         #mesa.cartas_al_maso()
                         #repartida_manos = False
