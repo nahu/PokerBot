@@ -194,10 +194,7 @@ class JugadorGUI():
         self.fichas = fichas
             
     def set_ganador(self, jugada):
-        if self.posicion == "abajo":
-            self.ganador = Texto('Ganador!!  ' + jugada, WIDTH/2, 417)
-        elif self.posicion == "arriba":
-            self.ganador = Texto('Ganador!!  ' + jugada, WIDTH/2, 417)
+        self.ganador.update_texto('Ganador!!  ' + jugada)
 
         
 class MesaGUI():
@@ -249,7 +246,7 @@ class MesaGUI():
         return True
 
     def set_pozo(self, monto):
-        self.pozo = Texto('Pozo: ' + str(monto), 815, HEIGHT/2)
+        self.pozo.update_texto('Pozo: ' + str(monto))
 
 class Dealer(pygame.sprite.Sprite):    
     def __init__(self):
@@ -365,7 +362,7 @@ def main():
 #    jug1 = Jugador(1,FICHAS1, "Pibe",  lock_jugador)
 #    jug2 = Jugador(2,FICHAS2, "PC")
 
-    jug1 = Jugador(1,FICHAS1, "Pibe")
+    jug1 = Bot(1,FICHAS1, "Pibe")
     jug2 = Bot(2,FICHAS2, "PC")
 
     mesa_nahu = Mesa(CIEGA, [jug1, jug2], lock_dibujar)
@@ -453,34 +450,27 @@ def main():
                 
                 if not repartida_manos:
                     repartida_manos = True
-                
+                    
                 print ('j1.dibuBotones: ' , hilo.mesa.jugadores[0].dibujar_botones())
                 print ('j1.carta1', hilo.mesa.jugadores[0].mano[0])
                 print ('j1.carta2',hilo.mesa.jugadores[0].mano[1])                
                 print ('j1.dealer :', hilo.mesa.jugadores[0].dealer)
                 print ('j1.bot',hilo.mesa.jugadores[0].bot)
                 print ('j1.fichas',hilo.mesa.jugadores[0].fichas)
-                print ('j1',hilo.mesa.jugadores[0].apuesta_actual)
-                    
+                print ('j1.apuesta',hilo.mesa.jugadores[0].apuesta_actual)
+                print '  '    
                 print ('j2.dibuBotones: ' , hilo.mesa.jugadores[1].dibujar_botones())
                 print ('j2.carta1', hilo.mesa.jugadores[1].mano[0])
                 print ('j2.carta2',hilo.mesa.jugadores[1].mano[1])                
                 print ('j2.dealer :', hilo.mesa.jugadores[1].dealer)
                 print ('j2.bot',hilo.mesa.jugadores[1].bot)
                 print ('j2.fichas',hilo.mesa.jugadores[1].fichas)
-                print ('j2',hilo.mesa.jugadores[1].apuesta_actual)
-                
-                
+                print ('j2.apuesta',hilo.mesa.jugadores[1].apuesta_actual)
+                print '  '
+                print ('mesa bote: ', hilo.mesa.bote)
                 
                 hilo.dibujado()
-                # - preflop mostrar animacion repartir cartas -- if animacion mostrada.. para q solo entre una vez
-                # - mostrar las cartas q esatan en hilo.mesa.jugadores[0].fichas y [1]
-                # - .dealer si es true, el es dealer
-                # - .bot es ia
-                # - .apuesta_actual 
-                # - .dibujar_botones() si es true, mostrar los 3 botones.. pasar/igualar apostar/subir retirar  
-                #  mesa.bote es el pozo
-                #  hilo.dibujado()
+
         elif hilo.mesa.ronda_actual == 2:
             repartida_manos = True
             print 'Entro Ronda 2'
@@ -538,9 +528,7 @@ def main():
         
         '''Eventos:'''
             
-        for eventos in pygame.event.get():            
-#            print eventos                                              #DEBUG
-        
+        for eventos in pygame.event.get():                    
             if eventos.type == QUIT:
                 hilo.terminar()
                 hilo.join()
@@ -558,34 +546,33 @@ def main():
                     if (jugador2.get_cartas()[1].rect.collidepoint((mX,mY))):
                         jugador2.get_cartas()[1].flip()
                         
-                    if (jugador1.get_boton("aceptar").rect.collidepoint((mX,mY)) and jugador1.turno ):
+                    if (jugador1.get_boton("aceptar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("aceptar") in all_sprites) ):
                         bandera1 = True
                         obtenerju = 'igualar'
                         jug1 =  'jug1'
-                    if (jugador1.get_boton("apostar").rect.collidepoint((mX,mY)) and jugador1.turno ):
+                    if (jugador1.get_boton("apostar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("apostar") in all_sprites) ):
                         bandera1 = True
                         obtenerju = 'apostar'
                         jug1 =  'jug1'
-                    if (jugador1.get_boton("retirar").rect.collidepoint((mX,mY)) and jugador1.turno ):
+                    if (jugador1.get_boton("retirar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("retirar") in all_sprites) ):
                         bandera1 = True
                         obtenerju = 'no_ir'
                         jug1 =  'jug1'
-                    if (jugador1.get_boton("subir_apuesta").rect.collidepoint((mX,mY)) and jugador1.turno ):
+                    if (jugador1.get_boton("subir_apuesta").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("subir_apuestas") in all_sprites) ):
                         bandera1 = True
                         obtenerju = 'apostar'
                         jug1 =  'jug1'
-                    if (jugador1.get_boton("pasar").rect.collidepoint((mX,mY)) and jugador1.turno ):
+                    if (jugador1.get_boton("pasar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("pasar") in all_sprites) ):
                         bandera1 = True
                         obtenerju = 'igualar'
                         jug1 =  'jug1'
 
                     
-                    if (jugador2.get_boton("apostar").rect.collidepoint((mX,mY)) and jugador2.turno ):
+                    if (jugador2.get_boton("apostar").rect.collidepoint((mX,mY)) and jugador2.turno and (jugador2.get_boton("apostar") in all_sprites) ):
                         bandera2 = True
                         obtenerju = 'apostar'
                         jug2 =  'jug2'
-                        
-                    
+                                
             elif eventos.type == KEYDOWN:
                 if eventos.key == 109:
                     jugador2.get_cartas()[0].flip()
@@ -604,7 +591,6 @@ def main():
         #print ('jug1 turno: ',jugador1.turno,'jug2 turno: ',jugador2.turno, 'Bandera: ' , bandera)         #DEBUG
         
         if jugador1.turno == True: 
-       
             if bandera1 == True:
                 jugador1.turno = False
                 jugador2.turno = True
@@ -614,7 +600,6 @@ def main():
         
         '''Jugador 2'''
         if jugador2.turno == True:
-
             if bandera2 == True:                
                 jugador1.turno = True
                 jugador2.turno = False
@@ -623,20 +608,13 @@ def main():
                 print jug2
         
         '''Animaciones'''
-<<<<<<< HEAD
-        
-#        if repartida_manos:
-#            repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
-#            if not repartida_manos:
-#                flop = True
-=======
+
         if repartida_manos:
-            #print 'yyy'
             repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
             if not repartida_manos:
                 flop = True
 
->>>>>>> branch 'master' of ssh://git@github.com/nahu/PokerBot.git
+
 #        if flop:
 #            flop = mesa.mostrar_flop('kd','kh','ks')
 #            if not flop:
