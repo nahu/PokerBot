@@ -108,6 +108,7 @@ class Mesa(object):
                 ganador = 1
             else:
                 ganador = 0
+            #todo sumar a fichas las fichas del poker
             return [True, ganador, "Jugador Retirado"]
         
         self.dealer = self.obtener_no_dealer()#se cambia el dealer para la siguiente ronda
@@ -178,8 +179,9 @@ class Mesa(object):
         #descontar al jugador!
         #si fin apuestas de la ronda > fin_ronda
         #si no_ir > fin_juego
-        #si igualan las apuestas y se pasa > fin_ronda        
-        if jugada=="no ir":
+        #si igualan las apuestas y se pasa > fin_ronda
+        print "JUGADA: ", jugada        
+        if jugada=="no_ir":
             print "+++++++accion: se fue"
             return "fin_juego"
         accion = ''
@@ -196,7 +198,7 @@ class Mesa(object):
         if self.ronda_actual.tipo == 3:
             accion = self.otras_rondas(jugada, self.ciega*2, jugador)
             self.set_nro_apuesta(self.ciega*2)    
-        print 'accion: ', accion              
+        print 'accion: ', accion, "ronda", self.ronda_actual.tipo           
         return accion
 
     def set_nro_apuesta(self,ciega):
@@ -209,7 +211,7 @@ class Mesa(object):
             self.ronda_actual.nro_apuesta = 2
         if mayor < ciega*4:
             self.ronda_actual.nro_apuesta = 3
-        if mayor < ciega*4:
+        if mayor >= ciega*4:
             self.ronda_actual.nro_apuesta = 4
                        
     def pre_flop(self, jugada, jugador):
@@ -313,7 +315,9 @@ class Mesa(object):
             self.jugador_actual = self.dealer
           
     def poner_ciegas(self):
+        
         self.bote = 0
+        print "BOTE INICIAL: ", self.bote
         #el dealer pone la ciega chica.
         if self.jugadores[self.dealer].verificar_allin(self.ciega/2):
             self.establecer_allin(self.dealer)
