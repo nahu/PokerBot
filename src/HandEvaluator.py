@@ -126,18 +126,18 @@ class HandEvaluator(object):
         nombre_jugada1, jugada1 = self.mejor_en_mano(comunitarias, mano1)
         nombre_jugada2, jugada2 = self.mejor_en_mano(comunitarias, mano2)
         orden = ["carta alta","par","doble par","trio","escalera","color","full","poker","escalera color","escalera real"]
-        peso = ["23456789djqk1"]
+        peso = "23456789djqk1"
         if orden.index(nombre_jugada1) > orden.index(nombre_jugada2):
             return "Jugador1",nombre_jugada1,jugada1
         if orden.index(nombre_jugada1) < orden.index(nombre_jugada2):
             return "Jugador2",nombre_jugada2,jugada2
         if orden.index(nombre_jugada1) == orden.index(nombre_jugada2):
             if nombre_jugada1 == "carta alta" or nombre_jugada1 == "par" or nombre_jugada1 == "trio" or nombre_jugada1 == "poker":
-                if peso.index(jugada1[0][0]) > peso.index(jugada1[0][0]):
+                if peso.index(jugada1[0][0]) > peso.index(jugada2[0][0]):
                     return "Jugador1",nombre_jugada1,jugada1
-                if peso.index(jugada1[0][0]) < peso.index(jugada1[0][0]):
+                if peso.index(jugada1[0][0]) < peso.index(jugada2[0][0]):
                     return "Jugador2",nombre_jugada2,jugada2
-                if peso.index(jugada1[0][0]) == peso.index(jugada1[0][0]):
+                if peso.index(jugada1[0][0]) == peso.index(jugada2[0][0]):
                     return "Empate",nombre_jugada1,None
             if nombre_jugada1 == "color":
                 if peso.index(jugada1[3][0]) > peso.index(jugada2[3][0]):
@@ -181,45 +181,45 @@ class HandEvaluator(object):
             jugada =  [total[len(total)-1] + colores[len(colores)-1][0]]
         
         if numeros_distintos > 3:
-            print "Se comprueba escalera"
+            #print "Se comprueba escalera"
             probable_mejor, probable_mejor_jugada= self.comprobar_escalera(total, colores)
             if probable_mejor != None:
                 if orden.index(probable_mejor) > orden.index(mejor):
                     mejor = probable_mejor
                     jugada = probable_mejor_jugada
-                    print "Escalera encontrada"
+                    #print "Escalera encontrada"
             if orden.index("poker") > orden.index(mejor):
-                print "Se comprueba Poker"
+                #print "Se comprueba Poker"
                 probable_mejor,probable_mejor_jugada = self.comprobar_poker(total,colores)
                 if probable_mejor != None:
                     mejor = probable_mejor
                     jugada = probable_mejor_jugada
             if orden.index("full") > orden.index(mejor):
-                print "Se comprueba Full"
+                #print "Se comprueba Full"
                 probable_mejor,probable_mejor_jugada = self.comprobar_full(total,colores)
                 if probable_mejor != None:
                     mejor = probable_mejor
                     jugada = probable_mejor_jugada
             if orden.index("color") > orden.index(mejor):
-                print "Se comprueba color"
+                #print "Se comprueba color"
                 probable_mejor,probable_mejor_jugada = self.comprobar_color(total,colores)
                 if probable_mejor != None:
                     mejor = probable_mejor
                     jugada = probable_mejor_jugada
             if orden.index("trio") > orden.index(mejor):
-                print "Se comprueba trio"
+                #print "Se comprueba trio"
                 probable_mejor,probable_mejor_jugada = self.comprobar_trio(total,colores)
                 if probable_mejor != None:
                     mejor = probable_mejor
                     jugada = probable_mejor_jugada
             if orden.index("doble par") > orden.index(mejor):
-                print "Se comrprueba doble par"
+                #print "Se comrprueba doble par"
                 probable_mejor,probable_mejor_jugada = self.comprobar_doble_par(total,colores)
                 if probable_mejor != None:
                     mejor = probable_mejor
                     jugada = probable_mejor_jugada
         if orden.index("par") > orden.index(mejor):
-                print "Se comprueba par"
+                #print "Se comprueba par"
                 probable_mejor,probable_mejor_jugada = self.comprobar_par(total,colores)
                 if probable_mejor != None:
                     mejor = probable_mejor
@@ -427,12 +427,13 @@ class HandEvaluator(object):
         peso = "123456789djqx1"
         colores = deepcopy(c)
         total2 = deepcopy(t)
-        if len(total2)<3:
-            return False
+        
         if total2[0] == "1":
             total2.pop(0)
             #total2.append(total2[0])
             #colores.append(colores[0])
+        if len(total2)<3:
+            return False
         bandera = 0
         i = -1
         while bandera == 0:
@@ -468,7 +469,7 @@ class HandEvaluator(object):
             for i in range(14):
                 encontrados[i] = "0"
             i = 0
-            for j in range (i,i+4):
+            for j in range (i,i+3):
                 #print j
                 subcadena_numeros = subcadena_numeros + total2[j]
             for char in subcadena_numeros:
@@ -484,7 +485,7 @@ class HandEvaluator(object):
                         contador = contador + 1
                 if contador == 3:
                     return True
-            if i + 4 > len(total2) - 1:
+            if i + 3 > len(total2) - 1:
                 bandera = 1
         return False
     
