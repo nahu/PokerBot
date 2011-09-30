@@ -19,8 +19,6 @@ CIEGA = 100
 
 # Clases 
 # ---------------------------------------------------------------------
-lock_dibujar = threading.Lock()
-lock_jugador = threading.Lock()
   
 class Thread(threading.Thread):  
     def __init__(self, mesa):
@@ -349,10 +347,12 @@ def main():
 
 #    jug1 = Jugador(1,FICHAS1, "Pibe",  lock_jugador)
 #    jug2 = Jugador(2,FICHAS2, "PC")
-
+    lock_dibujar = threading.Lock()
+    lock_jugador = threading.Lock()
+#   jug1 = Jugador(1,FICHAS1, "Pibe")
+#    jug2 = Bot(2,FICHAS2, "PC")
     jug1 = Bot(1,FICHAS1, "Pibe")
     jug2 = Bot(2,FICHAS2, "PC")
-
     mesa_nahu = Mesa(CIEGA, [jug1, jug2], lock_dibujar)
     
     hilo = Thread(mesa_nahu)
@@ -603,20 +603,12 @@ def main():
                 print jug2
         
         '''Animaciones'''
-<<<<<<< HEAD
-        
-#        if repartida_manos:
-#            repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
-#            if not repartida_manos:
-#                flop = True
-=======
         if repartida_manos:
             #print 'yyy'
             repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
             if not repartida_manos:
                 flop = True
 
->>>>>>> branch 'master' of ssh://git@github.com/nahu/PokerBot.git
 #        if flop:
 #            flop = mesa.mostrar_flop('kd','kh','ks')
 #            if not flop:

@@ -290,7 +290,8 @@ class Mesa(object):
             self.jugador_actual = self.dealer
           
     def poner_ciegas(self):
-        self.bote = 0
+        #self.bote = 0
+        self.bote = self.ciega + self.ciega * 2
         #el dealer pone la ciega chica.
         if self.jugadores[self.dealer].verificar_allin(self.ciega/2):
             self.establecer_allin(self.dealer)
