@@ -689,6 +689,7 @@ class HandEvaluator(object):
         retorno = self.normalizar(retorno)
         if len(retorno) == 1:
             retorno.append(False)
+        print "Retorno de desempatar: ", retorno
         return retorno
         
 
