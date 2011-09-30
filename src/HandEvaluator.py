@@ -366,7 +366,7 @@ class HandEvaluator(object):
                 if escalera_color == True:
                     for j in range (i , i+5):
                         jugada.append(total2[j]) 
-                    colors = [[color_comun], [color_comun],[color_comun],[color_comun]]
+                    colors = [[color_comun], [color_comun],[color_comun],[color_comun],[color_comun]]
                     retorno = self.lista_retorno(jugada, colors)
                     escalera_color_asegurada = True
                 else:
