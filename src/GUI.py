@@ -43,7 +43,7 @@ class Thread(threading.Thread):
         return self.mesa.jugadores[self.mesa.jugador_actual].dibujar_botones()
     
     def establecer_jugada(self, jugada):
-        self.mesa.jugadores[self.jugador_actual].definir_jugada(jugada)
+        self.mesa.jugadores[self.mesa.jugador_actual].definir_jugada(jugada)
         
     def terminar(self):
         self.term = True
@@ -245,7 +245,6 @@ class MesaGUI():
         return True
 
     def mostrar_turn(self):
-        repartida = False
         repartida = self.carta4.repartir(623, HEIGHT/2)
         if repartida:
             self.carta4.flip()
@@ -253,7 +252,6 @@ class MesaGUI():
         return True
 
     def mostrar_river(self):
-        repartida = False
         repartida = self.carta5.repartir(703, HEIGHT/2)
         if repartida:
             self.carta5.flip()
@@ -294,7 +292,6 @@ class Texto(pygame.sprite.Sprite):
     def update_texto(self, texto):
         self.image = pygame.font.Font.render(self.fuente, texto, 1, self.color)
 
-
 # ---------------------------------------------------------------------
 # Funciones
 # ---------------------------------------------------------------------
@@ -333,22 +330,23 @@ def actualizar_mesa(mesa , hilo, tipo):
         mesa.carta5.set_carta(hilo.mesa.comunitarias [4])
 
 def actualizar_jugador(jugador1, jugador2, hilo ):
-                jugador1.carta1.set_carta(hilo.mesa.jugadores[0].mano[0])
-                jugador1.carta2.set_carta(hilo.mesa.jugadores[0].mano[1])
-                jugador2.carta1.set_carta(hilo.mesa.jugadores[1].mano[0])
-                jugador2.carta2.set_carta(hilo.mesa.jugadores[1].mano[1])                
-                
-                jugador1.dealer = hilo.mesa.jugadores[0].dealer
-                jugador2.dealer = hilo.mesa.jugadores[1].dealer
-                
-                jugador1.bot = hilo.mesa.jugadores[0].bot
-                jugador2.bot = hilo.mesa.jugadores[1].bot
- 
-                jugador1.set_credito(hilo.mesa.jugadores[0].fichas)
-                jugador2.set_credito(hilo.mesa.jugadores[1].fichas)
-                                
-                jugador1.set_apuesta(hilo.mesa.jugadores[0].apuesta_actual)
-                jugador2.set_apuesta(hilo.mesa.jugadores[1].apuesta_actual)    
+    jugador1.carta1.set_carta(hilo.mesa.jugadores[0].mano[0])
+    jugador1.carta2.set_carta(hilo.mesa.jugadores[0].mano[1])
+    jugador2.carta1.set_carta(hilo.mesa.jugadores[1].mano[0])
+    jugador2.carta2.set_carta(hilo.mesa.jugadores[1].mano[1])                
+    
+    jugador1.dealer = hilo.mesa.jugadores[0].dealer
+    jugador2.dealer = hilo.mesa.jugadores[1].dealer
+    
+    jugador1.bot = hilo.mesa.jugadores[0].bot
+    jugador2.bot = hilo.mesa.jugadores[1].bot
+    
+    jugador1.set_credito(hilo.mesa.jugadores[0].fichas)
+    jugador2.set_credito(hilo.mesa.jugadores[1].fichas)
+                    
+    jugador1.set_apuesta(hilo.mesa.jugadores[0].apuesta_actual)
+    jugador2.set_apuesta(hilo.mesa.jugadores[1].apuesta_actual)
+           
     
 def repartir_manos(repartida, jugador1, jugador2, cartas_abiertas):
     repartida = [False,False,False,False]
@@ -389,9 +387,11 @@ def main():
 #    jug2 = Jugador(2,FICHAS2, "PC")
     lock_dibujar = threading.Lock()
     lock_jugador = threading.Lock()
+    
 #   jug1 = Jugador(1,FICHAS1, "Pibe")
-#    jug2 = Bot(2,FICHAS2, "PC")
-    jug1 = Bot(1,FICHAS1, "Pibe")
+#   jug2 = Bot(2,FICHAS2, "PC")
+    
+    jug1 = Jugador(1,FICHAS1, "Pibe", lock_jugador)
     jug2 = Bot(2,FICHAS2, "PC")
     mesa_nahu = Mesa(CIEGA, [jug1, jug2], lock_dibujar)
     
@@ -447,10 +447,7 @@ def main():
     
     ## Set de variables
     jugador1.turno = True
-    jugador2.turno = False
-    bandera1 = False
-    bandera2 = False
-    
+    jugador2.turno = False    
     conta = 0                                                           #DEBUG
     cartas_abiertas = False
         
@@ -465,7 +462,8 @@ def main():
     dibujar_ganador1 = False
     dibujar_ganador2 = False
     
-    bandera = False
+    mano_nueva = False
+    
     while True:
         conta +=1                                                       #DEBUG
         time = clock.tick(60)  
@@ -473,6 +471,12 @@ def main():
         if hilo.mesa.dibujar:
             if hilo.mesa.ronda_actual.tipo == 1:
                 print 'Entro Ronda 1' 
+                
+                if mano_nueva == True:
+                    jugador1.cartas_al_maso()
+                    jugador2.cartas_al_maso()
+                    mesa.cartas_al_maso()
+                
                 actualizar_jugador(jugador1, jugador2, hilo )
                 
                 if jugador1.dealer:
@@ -485,24 +489,24 @@ def main():
                 if not repartida_manos:
                     repartida_manos = True
                     
-                print ('j1.dibuBotones: ' , hilo.mesa.jugadores[0].dibujar_botones())
-                print ('j1.carta1', hilo.mesa.jugadores[0].mano[0])
-                print ('j1.carta2',hilo.mesa.jugadores[0].mano[1])                
-                print ('j1.dealer :', hilo.mesa.jugadores[0].dealer)
-                print ('j1.bot',hilo.mesa.jugadores[0].bot)
-                print ('j1.fichas',hilo.mesa.jugadores[0].fichas)
-                print ('j1.apuesta',hilo.mesa.jugadores[0].apuesta_actual)
-                print '  '    
-                print ('j2.dibuBotones: ' , hilo.mesa.jugadores[1].dibujar_botones())
-                print ('j2.carta1', hilo.mesa.jugadores[1].mano[0])
-                print ('j2.carta2',hilo.mesa.jugadores[1].mano[1])                
-                print ('j2.dealer :', hilo.mesa.jugadores[1].dealer)
-                print ('j2.bot',hilo.mesa.jugadores[1].bot)
-                print ('j2.fichas',hilo.mesa.jugadores[1].fichas)
-                print ('j2.apuesta',hilo.mesa.jugadores[1].apuesta_actual)
-                print '  '
-                print ('j1.nro apuesta', hilo.mesa.ronda_actual.nro_apuesta)
-                print ('mesa bote: ', hilo.mesa.bote)
+#                print ('j1.dibuBotones: ' , hilo.mesa.jugadores[0].dibujar_botones())
+#                print ('j1.carta1', hilo.mesa.jugadores[0].mano[0])
+#                print ('j1.carta2',hilo.mesa.jugadores[0].mano[1])                
+#                print ('j1.dealer :', hilo.mesa.jugadores[0].dealer)
+#                print ('j1.bot',hilo.mesa.jugadores[0].bot)
+#                print ('j1.fichas',hilo.mesa.jugadores[0].fichas)
+#                print ('j1.apuesta',hilo.mesa.jugadores[0].apuesta_actual)
+#                print '  '    
+#                print ('j2.dibuBotones: ' , hilo.mesa.jugadores[1].dibujar_botones())
+#                print ('j2.carta1', hilo.mesa.jugadores[1].mano[0])
+#                print ('j2.carta2',hilo.mesa.jugadores[1].mano[1])                
+#                print ('j2.dealer :', hilo.mesa.jugadores[1].dealer)
+#                print ('j2.bot',hilo.mesa.jugadores[1].bot)
+#                print ('j2.fichas',hilo.mesa.jugadores[1].fichas)
+#                print ('j2.apuesta',hilo.mesa.jugadores[1].apuesta_actual)
+#                print '  '
+#                print ('j1.nro apuesta', hilo.mesa.ronda_actual.nro_apuesta)
+#                print ('mesa bote: ', hilo.mesa.bote)
                 
                 hilo.dibujado()
 
@@ -523,6 +527,25 @@ def main():
                 
                 if not flop:
                     flop = True
+
+#                print ('j1.dibuBotones: ' , hilo.mesa.jugadores[0].dibujar_botones())
+#                print ('j1.carta1', hilo.mesa.jugadores[0].mano[0])
+#                print ('j1.carta2',hilo.mesa.jugadores[0].mano[1])                
+#                print ('j1.dealer :', hilo.mesa.jugadores[0].dealer)
+#                print ('j1.bot',hilo.mesa.jugadores[0].bot)
+#                print ('j1.fichas',hilo.mesa.jugadores[0].fichas)
+#                print ('j1.apuesta',hilo.mesa.jugadores[0].apuesta_actual)
+#                print '  '    
+#                print ('j2.dibuBotones: ' , hilo.mesa.jugadores[1].dibujar_botones())
+#                print ('j2.carta1', hilo.mesa.jugadores[1].mano[0])
+#                print ('j2.carta2',hilo.mesa.jugadores[1].mano[1])                
+#                print ('j2.dealer :', hilo.mesa.jugadores[1].dealer)
+#                print ('j2.bot',hilo.mesa.jugadores[1].bot)
+#                print ('j2.fichas',hilo.mesa.jugadores[1].fichas)
+#                print ('j2.apuesta',hilo.mesa.jugadores[1].apuesta_actual)
+#                print '  '
+#                print ('j1.nro apuesta', hilo.mesa.ronda_actual.nro_apuesta)
+#                print ('mesa bote: ', hilo.mesa.bote)                
                 
                 hilo.dibujado()
 
@@ -543,6 +566,25 @@ def main():
                 
                 if not turn:
                     turn = True
+
+#                print ('j1.dibuBotones: ' , hilo.mesa.jugadores[0].dibujar_botones())
+#                print ('j1.carta1', hilo.mesa.jugadores[0].mano[0])
+#                print ('j1.carta2',hilo.mesa.jugadores[0].mano[1])                
+#                print ('j1.dealer :', hilo.mesa.jugadores[0].dealer)
+#                print ('j1.bot',hilo.mesa.jugadores[0].bot)
+#                print ('j1.fichas',hilo.mesa.jugadores[0].fichas)
+#                print ('j1.apuesta',hilo.mesa.jugadores[0].apuesta_actual)
+#                print '  '    
+#                print ('j2.dibuBotones: ' , hilo.mesa.jugadores[1].dibujar_botones())
+#                print ('j2.carta1', hilo.mesa.jugadores[1].mano[0])
+#                print ('j2.carta2',hilo.mesa.jugadores[1].mano[1])                
+#                print ('j2.dealer :', hilo.mesa.jugadores[1].dealer)
+#                print ('j2.bot',hilo.mesa.jugadores[1].bot)
+#                print ('j2.fichas',hilo.mesa.jugadores[1].fichas)
+#                print ('j2.apuesta',hilo.mesa.jugadores[1].apuesta_actual)
+#                print '  '
+#                print ('j1.nro apuesta', hilo.mesa.ronda_actual.nro_apuesta)
+#                print ('mesa bote: ', hilo.mesa.bote)
                 
                 hilo.dibujado()
             elif hilo.mesa.ronda_actual.tipo == 4:
@@ -562,12 +604,32 @@ def main():
                 
                 if not river:
                     river = True
+
+#                print ('j1.dibuBotones: ' , hilo.mesa.jugadores[0].dibujar_botones())
+#                print ('j1.carta1', hilo.mesa.jugadores[0].mano[0])
+#                print ('j1.carta2',hilo.mesa.jugadores[0].mano[1])                
+#                print ('j1.dealer :', hilo.mesa.jugadores[0].dealer)
+#                print ('j1.bot',hilo.mesa.jugadores[0].bot)
+#                print ('j1.fichas',hilo.mesa.jugadores[0].fichas)
+#                print ('j1.apuesta',hilo.mesa.jugadores[0].apuesta_actual)
+#                print '  '    
+#                print ('j2.dibuBotones: ' , hilo.mesa.jugadores[1].dibujar_botones())
+#                print ('j2.carta1', hilo.mesa.jugadores[1].mano[0])
+#                print ('j2.carta2',hilo.mesa.jugadores[1].mano[1])                
+#                print ('j2.dealer :', hilo.mesa.jugadores[1].dealer)
+#                print ('j2.bot',hilo.mesa.jugadores[1].bot)
+#                print ('j2.fichas',hilo.mesa.jugadores[1].fichas)
+#                print ('j2.apuesta',hilo.mesa.jugadores[1].apuesta_actual)
+#                print '  '
+#                print ('j1.nro apuesta', hilo.mesa.ronda_actual.nro_apuesta)
+#                print ('mesa bote: ', hilo.mesa.bote)
                 
                 hilo.dibujado()
             
             print hilo.mesa.resultado
             if hilo.mesa.resultado != None:
                 if not hilo.mesa.resultado[0]:
+                    mano_nueva = True
                     if hilo.mesa.resultado[1] == 0:
                         jugador1.set_ganador(hilo.mesa.resultado[2])
                         dibujar_ganador1 = True
@@ -576,10 +638,11 @@ def main():
                         dibujar_ganador2 = True
                     elif hilo.mesa.resultado[1] == None:
                         dibujar_ganador1 = True
-                        jugador2.set_ganador(hilo.mesa.resultado[2])
+                        dibujar_ganador2 = True
+                        jugador1.set_ganador('Empate')
+                        jugador2.set_ganador('Empate')
                         
-                        #jugador1.cartas_al_maso()
-                        #jugador2.cartas_al_maso()
+                        
                         #mesa.cartas_al_maso()
                         #repartida_manos = False
                         #flop = False
@@ -623,32 +686,16 @@ def main():
                     if (jugador2.get_cartas()[1].rect.collidepoint((mX,mY))):
                         jugador2.get_cartas()[1].flip()
                         
-                    if (jugador1.get_boton("aceptar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("aceptar") in all_sprites) ):
-                        bandera1 = True
-                        obtenerju = 'igualar'
-                        jug1 =  'jug1'
-                    if (jugador1.get_boton("apostar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("apostar") in all_sprites) ):
-                        bandera1 = True
-                        obtenerju = 'apostar'
-                        jug1 =  'jug1'
-                    if (jugador1.get_boton("retirar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("retirar") in all_sprites) ):
-                        bandera1 = True
-                        obtenerju = 'no_ir'
-                        jug1 =  'jug1'
-                    if (jugador1.get_boton("subir_apuesta").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("subir_apuestas") in all_sprites) ):
-                        bandera1 = True
-                        obtenerju = 'apostar'
-                        jug1 =  'jug1'
-                    if (jugador1.get_boton("pasar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("pasar") in all_sprites) ):
-                        bandera1 = True
-                        obtenerju = 'igualar'
-                        jug1 =  'jug1'
-
-                    
-                    if (jugador2.get_boton("apostar").rect.collidepoint((mX,mY)) and jugador2.turno and (jugador2.get_boton("apostar") in all_sprites) ):
-                        bandera2 = True
-                        obtenerju = 'apostar'
-                        jug2 =  'jug2'
+                    if (jugador1.get_boton("aceptar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("aceptar") in all_sprites) and hilo.mesa.jugadores[0].dibujar_botones() ):
+                        hilo.establecer_jugada("igualar")
+                    if (jugador1.get_boton("apostar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("apostar") in all_sprites) and hilo.mesa.jugadores[0].dibujar_botones() ):
+                        hilo.establecer_jugada("apostar")
+                    if (jugador1.get_boton("retirar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("retirar") in all_sprites) and hilo.mesa.jugadores[0].dibujar_botones() ):
+                        hilo.establecer_jugada("no_ir")
+                    if (jugador1.get_boton("subir_apuesta").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("subir_apuestas") in all_sprites) and hilo.mesa.jugadores[0].dibujar_botones() ):
+                        hilo.establecer_jugada("apostar")
+                    if (jugador1.get_boton("pasar").rect.collidepoint((mX,mY)) and jugador1.turno and (jugador1.get_boton("pasar") in all_sprites) and hilo.mesa.jugadores[0].dibujar_botones()):
+                        hilo.establecer_jugada("igualar")
                                 
             elif eventos.type == KEYDOWN:
                 if eventos.key == 109:
@@ -667,47 +714,57 @@ def main():
         '''Jugador 1'''
         #print ('jug1 turno: ',jugador1.turno,'jug2 turno: ',jugador2.turno, 'Bandera: ' , bandera)         #DEBUG
         
-        if jugador1.turno == True: 
-            if bandera1 == True:
-                jugador1.turno = False
-                jugador2.turno = True
-                bandera1 = False
-                print obtenerju
-                print jug1
-        
-        '''Jugador 2'''
-        if jugador2.turno == True:
-            if bandera2 == True:                
-                jugador1.turno = True
-                jugador2.turno = False
-                bandera2 = False
-                print obtenerju
-                print jug2
+#        if jugador1.turno == True: 
+#            if bandera1 == True:
+#                jugador1.turno = False
+#                jugador2.turno = True
+#                bandera1 = False
+#                print obtenerju
+#                print jug1
+#        
+#        '''Jugador 2'''
+#        if jugador2.turno == True:
+#            if bandera2 == True:                
+#                jugador1.turno = True
+#                jugador2.turno = False
+#                bandera2 = False
+#                print obtenerju
+#                print jug2
         
         '''Animaciones'''
 
         if repartida_manos:
             repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
             if not repartida_manos:
+                jugador1.carta1.image = jugador1.carta1.front_img
+                jugador1.carta2.image = jugador1.carta2.front_img
+                #jugador2.carta1.image = jugador2.carta1.front_img
+                #jugador2.carta2.image = jugador2.carta2.front_img                
                 repartida_terminada = True
                 
         if flop and repartida_terminada:
             flop = mesa.mostrar_flop()
             if not flop:
+                mesa.carta1.image = mesa.carta1.front_img
+                mesa.carta2.image = mesa.carta2.front_img
+                mesa.carta3.image = mesa.carta3.front_img
                 flop_terminado = True
 
         if turn and flop_terminado:
             turn = mesa.mostrar_turn()
             if not turn:
+                mesa.carta4.image = mesa.carta4.front_img
                 turn_terminado = True
                 
         if river and turn_terminado:
             river = mesa.mostrar_river()
             if not river:
+                mesa.carta5.image = mesa.carta5.front_img
                 river_terminado = True
         
         if dibujar_ganador1 and river_terminado:
             all_sprites.add(jugador1.ganador)
+
         if dibujar_ganador2 and river_terminado:
             all_sprites.add(jugador2.ganador)
             

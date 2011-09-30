@@ -32,7 +32,7 @@ class Mesa(object):
         self.mazo = Mazo()
         self.bote = 0
         self.jugadores = jugadores
-        self.dealer = 0 #posicion en la lista jugaores
+        self.dealer = 1 #posicion en la lista jugaores
         self.comunitarias = []#[False, False, False, False, False]
         self.ronda_actual = None
         self.nro_jugadores = 2

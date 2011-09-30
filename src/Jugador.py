@@ -63,15 +63,20 @@ class Jugador(object):
         el contrario se retirarse puede mostrar o no mostrar las cartas)]
         @rtype: String
         '''
+        self.lock.acquire()
         self.esperar = True
-        while not self.esperar:
-            pass
+        self.lock.release()
+        while True:
+            if not self.esperar:
+                break
         
         return self.jugada                    
             
     def definir_jugada(self, jugada):
+        self.lock.acquire()
         self.jugada = jugada
         self.esperar = False
+        self.lock.release()
         
 
     def completar_ciega(self, ciega):
