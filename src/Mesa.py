@@ -197,11 +197,13 @@ class Mesa(object):
                 if self.jugadores[jugador].apuesta_actual == self.ciega/2:
                     self.jugadores[jugador].completar_ciega(self.ciega)
                     self.bote+=self.ciega/2
+                    print "Bote - igualar - dealer: " + str(self.bote)
                     return "continuar"
                 else:
                     monto = self.jugadores[self.obtener_no_dealer()].apuesta_actual
                     apuesta, self.allin =self.jugadores[jugador].igualar(monto) 
                     self.bote += apuesta
+                    print "Bote - igualar - dealer: " + str(self.bote)                    
                     if self.allin:
                         return "fin_ronda"
                     return "continuar"
@@ -211,6 +213,7 @@ class Mesa(object):
                 else: 
                     apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega)                      
                 self.bote += apuesta
+                print "Bote - apostar - dealer: " + str(self.bote)                
                 if self.allin:
                     return "fin_ronda"
                 return "continuar"
@@ -290,8 +293,7 @@ class Mesa(object):
             self.jugador_actual = self.dealer
           
     def poner_ciegas(self):
-        #self.bote = 0
-        self.bote = self.ciega + self.ciega * 2
+        self.bote = 0
         #el dealer pone la ciega chica.
         if self.jugadores[self.dealer].verificar_allin(self.ciega/2):
             self.establecer_allin(self.dealer)
@@ -304,6 +306,7 @@ class Mesa(object):
         else:
             self.jugadores[self.obtener_no_dealer()].fichas -= self.ciega
             self.jugadores[self.obtener_no_dealer()].apuesta_actual = self.ciega
+        self.bote = self.ciega + self.ciega * 2
  
     def establecer_allin(self, jugador):
         self.allin = True   

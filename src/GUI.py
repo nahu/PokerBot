@@ -467,6 +467,7 @@ def main():
                 print ('j2.fichas',hilo.mesa.jugadores[1].fichas)
                 print ('j2.apuesta',hilo.mesa.jugadores[1].apuesta_actual)
                 print '  '
+                print ('j1.nro apuesta', hilo.mesa.ronda_actual.nro_apuesta)
                 print ('mesa bote: ', hilo.mesa.bote)
                 
                 hilo.dibujado()
