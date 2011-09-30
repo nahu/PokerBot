@@ -35,6 +35,7 @@ class Bot(Jugador):
         self.dealer = False
         self.jugada = None
         self.esperar = False
+        self.allin = False
         self.p = p
         
     def inicializar_estrategia(self):
