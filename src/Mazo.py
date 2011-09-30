@@ -102,6 +102,8 @@ class Mazo(object):
     def obtener_siguiente(self):
         self.indice += 1
         return self.cartas[self.indice]
-    
 
+#m = Mazo()   
+#for i in range(0, 3):
+#    print m.obtener_siguiente()
     

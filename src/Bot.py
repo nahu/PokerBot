@@ -10,9 +10,9 @@ Creado el 23/09/2011
 '''
 
 
-import Jugador
-import Cerebro
-import HandEvaluator
+from Jugador import Jugador
+from Cerebro import Cerebro
+from HandEvaluator import HandEvaluator
 import random
 
 class Bot(Jugador):
@@ -61,7 +61,7 @@ class Bot(Jugador):
         dealer: true o false si es que soy o no dealer
         '''
         
-        return Cerebro().elegir_accion(self.mano, comunitarias, ronda, self.calcular_odds, self.dealer)
+        return self.cerebro.elegir_accion(self.mano, comunitarias, ronda, self.calcular_odds(ronda, comunitarias), self.dealer)
          
     
     def calcular_odds(self, ronda, comunitarias):
@@ -70,7 +70,7 @@ class Bot(Jugador):
         odds={"carta alta":[None,True],"par":[None,True], "doble par":[None,True], "trio":[None,True], "escalera interna":[None,True], "escalera abierta":[None,True], 
               "color":[None, True], "full":[None,True], "poker":[None,True]}
 
-        numero,colores = self.hanEval.gobysificar(self.mano, comunitarias)
+        numero,colores = self.handEval.gobisificar(self.mano, comunitarias)
         
         if ronda.tipo == 1:#solo en el pre-flop
             tipo = self.tiene_cartas_consecutivas()
@@ -144,14 +144,15 @@ class Bot(Jugador):
         #+++++++++++++++++++++++++++++++++++++++++++++++++++++++
         if (odds["escalera interna"][0]==0 or odds["escalera abierta"][0]==0) and odds["color"][0]==0:
             odds["escalera color"][0]=0
-             
-        self.comprobar_jugada_en_mesa(odds, comunitarias)
+        
+        if not ronda.tipo == 1:
+            self.comprobar_jugada_en_mesa(odds, comunitarias)
              
         return odds 
                     
     
     def comprobar_jugada_en_mesa(self,odds, comunitarias): 
-        numero,colores = self.handEval.gobysificar([],comunitarias)
+        numero,colores = self.handEval.gobisificar([],comunitarias)
         
         #comprobar par
         tipo,jugada = self.handEval.comprobar_par(numero,colores)
