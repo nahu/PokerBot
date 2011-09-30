@@ -10,11 +10,9 @@ Creado el 23/09/2011
 '''
 
 
-
 from Jugador import Jugador
 from Cerebro import Cerebro
 from HandEvaluator import HandEvaluator
-
 import random
 
 class Bot(Jugador):

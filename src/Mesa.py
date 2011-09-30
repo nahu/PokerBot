@@ -42,6 +42,21 @@ class Mesa(object):
         self.resultado = None #si es distinto de None, tiene el resultado del juego
         self.lock = lock
     
+    def inicializar_mesa(self):
+        self.bote = 0
+        self.comunitarias = []
+        self.allin = False
+        self.dibujar = False
+        self.resultado = None #si es distinto de None, tiene el resultado del juego
+        self.dealer = self.obtener_no_dealer()#se cambia el dealer para la siguiente ronda
+        self.jugadores[self.dealer].dealer = True
+        self.jugadores[self.obtener_no_dealer()].dealer = False
+        for j in self.jugadores:
+            j.cerar_apuesta()
+        print "Fondo Jugadores: "
+        print self.jugadores[0].nombre, self.jugadores[0].fichas
+        print self.jugadores[1].nombre, self.jugadores[1].fichas 
+      
     def set_dibujar(self):
         self.lock.acquire()
         self.dibujar = True
@@ -79,7 +94,9 @@ class Mesa(object):
         tercera posición indica el nombre de la jugada 
         ganadora.
         '''
-        self.resultado = None
+        self.inicializar_mesa()
+        
+        #solucionar evaluar allin de poner_ciegas
         self.poner_ciegas()
         self.jugador_actual = self.dealer
         
@@ -93,8 +110,12 @@ class Mesa(object):
         for tipo in range(1,5): #iterador de rondas
             self.croupier(tipo) #acciones del croupier, repartir manos y colocar comunitaria
             self.ronda_actual = Ronda(tipo, 1, self.ciega, self.bote)
-            self.set_dibujar()
-            self.esperar_dibujo()
+            if tipo > 1:
+                for j in self.jugadores:
+                    j.cerar_apuesta()
+                
+#            self.set_dibujar()
+#            self.esperar_dibujo()
             if not self.allin:
                 resultado_ronda = self.ronda(tipo)
                 if resultado_ronda == "fin_juego":
@@ -108,10 +129,11 @@ class Mesa(object):
                 ganador = 1
             else:
                 ganador = 0
-            #todo sumar a fichas las fichas del poker
+                
+            self.jugadores[ganador].fichas += self.bote
             return [True, ganador, "Jugador Retirado"]
         
-        self.dealer = self.obtener_no_dealer()#se cambia el dealer para la siguiente ronda
+        
         
         return self.evaluar_ganador()
         
@@ -124,6 +146,8 @@ class Mesa(object):
            nombre de la jugada: 
            jugada: [], None'''
         jugador, nombre_jugada, cartas = HandEvaluator().ganador(self.comunitarias, self.jugadores[0].mano, self.jugadores[1].mano)
+        
+        print "cartas de la jugada: ", cartas
         gana = None
         if jugador == "Jugador1" :
             gana = 0
@@ -131,12 +155,18 @@ class Mesa(object):
         if jugador == "Jugador2" :
             gana = 1
         
-        termina_juego = False 
+        continua_juego = True 
         if self.jugadores[0].fichas == 0 or self.jugadores[1].fichas == 0:
-            termina_juego = True
+            continua_juego = False
         
-        self.resultado = [termina_juego, gana, nombre_jugada]
+        self.resultado = [continua_juego, gana, nombre_jugada]
         
+        if not gana: #empate
+            for j in self.jugadores:
+                j.fichas =+ self.bote//2
+        else:   
+            self.jugadores[gana].fichas += self.bote
+            
         return self.resultado
     
     def ronda(self, tipo_ronda):
@@ -145,6 +175,7 @@ class Mesa(object):
 #        self.jugadores[self.dealer].mano[0] = "9c"
 #        self.jugadores[self.dealer].mano[1] = "9d"
         print "Ronda ", tipo_ronda
+            
         c = 0
         while True:
             for i in range(0, self.nro_jugadores):
@@ -153,8 +184,8 @@ class Mesa(object):
                 if not self.allin:
                     self.ronda_actual.pot = self.bote
                     jugada = self.jugadores[self.jugador_actual].obtener_jugada(self.ronda_actual, self.comunitarias)
-                    self.set_dibujar()
-                    self.esperar_dibujo()
+#                    self.set_dibujar()
+#                    self.esperar_dibujo()
                     resultado = self.evaluar_accion(jugada, self.jugador_actual)
                     if resultado != "continuar":
                         break
@@ -186,16 +217,16 @@ class Mesa(object):
             return "fin_juego"
         accion = ''
         #PRE FLOP
-        if self.ronda_actual.tipo == 0:
+        if self.ronda_actual.tipo == 1:
             accion = self.pre_flop(jugada, jugador)
             self.set_nro_apuesta(self.ciega)        
-        if self.ronda_actual.tipo == 1:
+        if self.ronda_actual.tipo == 2:
             accion = self.otras_rondas(jugada, self.ciega, jugador)
             self.set_nro_apuesta(self.ciega)
-        if self.ronda_actual.tipo == 2:
+        if self.ronda_actual.tipo == 3:
             accion = self.otras_rondas(jugada, self.ciega*2, jugador)
             self.set_nro_apuesta(self.ciega*2)
-        if self.ronda_actual.tipo == 3:
+        if self.ronda_actual.tipo == 4:
             accion = self.otras_rondas(jugada, self.ciega*2, jugador)
             self.set_nro_apuesta(self.ciega*2)    
         print 'accion: ', accion, "ronda", self.ronda_actual.tipo           
@@ -215,25 +246,31 @@ class Mesa(object):
             self.ronda_actual.nro_apuesta = 4
                        
     def pre_flop(self, jugada, jugador):
-        if self.es_dealer(jugador):
+        if self.jugadores[jugador].dealer:
             if jugada=="igualar":
                 if self.jugadores[jugador].apuesta_actual == self.ciega/2:
                     self.jugadores[jugador].completar_ciega(self.ciega)
                     self.bote+=self.ciega/2
-                    return "continuar"
                 else:
                     monto = self.jugadores[self.obtener_no_dealer()].apuesta_actual
                     apuesta, self.allin =self.jugadores[jugador].igualar(monto) 
                     self.bote += apuesta
                     if self.allin:
                         return "fin_ronda"
-                    return "continuar"
+                return "continuar"
             if jugada=="apostar":
                 if self.jugadores[jugador].apuesta_actual == self.ciega/2:
-                    apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega*1,5)
-                else: 
+                    apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega*1.5)
+                    self.bote += apuesta
+                else:
+                    monto = self.jugadores[self.obtener_no_dealer()].apuesta_actual
+                    apuesta, self.allin = self.jugadores[jugador].igualar(monto)                    
+                    self.bote += apuesta
+                    if self.allin:
+                        return "fin_ronda"
+                                    
                     apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega)                      
-                self.bote += apuesta
+                    self.bote += apuesta
                 if self.allin:
                     return "fin_ronda"
                 return "continuar"
@@ -255,20 +292,18 @@ class Mesa(object):
                 self.bote += apuesta
                 if self.allin:
                     return "fin_ronda"
-                if self.jugadores[contrario].apuesta_actual < self.ciega*4:
+                if self.jugadores[contrario].apuesta_actual == self.ciega*4:
+                    return "fin_ronda"
+                else:
                     apuesta, self.allin = self.jugadores[jugador].subir_apuesta(self.ciega)
                     self.bote += apuesta
                     if self.allin:
                         return "fin_ronda"
                     return "continuar"
-                else:
-                    apuesta, self.allin = self.jugadores[jugador].igualar(monto)
-                    self.bote += apuesta
-                    return "fin_ronda"
     def otras_rondas(self, jugada, ciega_minima, jugador):        
         if jugada=="igualar":
             if self.apuestas_igualadas():
-                if self.es_dealer(jugador): #puede terminar la ronda
+                if self.jugadores[jugador].dealer: #puede terminar la ronda
                     print "+++++++accion: fin ronda - pasaron"
                     return "fin_ronda"
                 else:
@@ -279,25 +314,26 @@ class Mesa(object):
                 self.bote += apuesta
                 if self.allin:
                     return "fin_ronda"
+                if self.jugadores[jugador].dealer and self.jugadores[jugador].apuesta_actual == ciega_minima*4:
+                    return "fin_ronda"
                 return "continuar"
         if jugada=="apostar":
             contrario = self.obtener_contrario(jugador) 
-            monto = self.jugadores[contrario].apuesta_actual            
+            monto = self.jugadores[contrario].apuesta_actual
             
             apuesta, self.allin = self.jugadores[jugador].igualar(monto)
-            self.bote += apuesta            
+            self.bote += apuesta
             if self.allin:
                 return "fin_ronda"
-            if self.jugadores[contrario].apuesta_actual < ciega_minima*4:
+            if self.jugadores[contrario].apuesta_actual == ciega_minima*4:
+                return "fin_ronda"
+            else:
                 apuesta, self.allin = self.jugadores[jugador].subir_apuesta(ciega_minima)
                 self.bote += apuesta
                 if self.allin:
                     return "fin_ronda"
                 return "continuar"
-            else:
-                apuesta, self.allin = self.jugadores[jugador].igualar(monto)
-                self.bote += apuesta
-                return "fin_ronda"  
+            
                 
     def apuestas_igualadas(self):
         if self.jugadores[0].apuesta_actual == self.jugadores[1].apuesta_actual:

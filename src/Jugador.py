@@ -29,6 +29,7 @@ class Jugador(object):
         self.esperar = False
     
     def imprimir(self):
+        print "   NOMBRE: ", self.nombre
         print "   fichas: ", self.fichas
         print "   mano: ", self.mano
         print "   es bot: ", self.bot
@@ -110,4 +111,6 @@ class Jugador(object):
     def dibujar_botones(self):
         return self.esperar
         
-        
+    def cerar_apuesta(self):
+        self.apuesta_actual = 0
+           
