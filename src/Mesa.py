@@ -72,7 +72,8 @@ class Mesa(object):
         no_ir = False
         
         for tipo in range(1,5): #iterador de rondas
-            self.croupier(tipo) #acciones del croupier, repartir manos y colocar comunitarias
+            self.croupier(tipo) #acciones del croupier, repartir manos y colocar comunitaria
+            self.ronda_actual = Ronda(tipo, 1, self.ciega, self.bote)
             self.set_dibujar()
             self.esperar_dibujo()
             if not self.allin:
@@ -82,6 +83,13 @@ class Mesa(object):
                     break
                 
             self.jugador_actual = self.obtener_no_dealer()#después del pre-flop el que juega primero es el que no es dealer
+        
+        if no_ir:
+            if self.jugador_actual == 0:
+                ganador = 1
+            else:
+                ganador = 0
+            return [True, ganador, "Jugador Retirado"]
         
         self.dealer = self.obtener_no_dealer()#se cambia el dealer para la siguiente ronda
         
@@ -114,7 +122,6 @@ class Mesa(object):
     def ronda(self, tipo_ronda):
         #retorna si se continúa o no con la siguiente ronda
         resultado = "continuar"
-        self.ronda_actual = Ronda(tipo_ronda, 1, self.ciega, self.bote)
         
         while True:
             for i in range(0, self.nro_jugadores):
@@ -152,13 +159,13 @@ class Mesa(object):
             accion = self.pre_flop(jugada, jugador)
             self.set_nro_apuesta(self.ciega)        
         if self.ronda_actual.tipo == 1:
-            accion = self.flop(jugada, self.ciega, jugador)
+            accion = self.otras_rondas(jugada, self.ciega, jugador)
             self.set_nro_apuesta(self.ciega)
         if self.ronda_actual.tipo == 2:
-            accion = self.flop(jugada, self.ciega*2, jugador)
+            accion = self.otras_rondas(jugada, self.ciega*2, jugador)
             self.set_nro_apuesta(self.ciega*2)
         if self.ronda_actual.tipo == 3:
-            accion = self.flop(jugada, self.ciega*2, jugador)
+            accion = self.otras_rondas(jugada, self.ciega*2, jugador)
             self.set_nro_apuesta(self.ciega*2)                  
         return accion
 

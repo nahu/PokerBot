@@ -47,7 +47,6 @@ class Thread(threading.Thread):
         self.mesa.jugadores[self.jugador_actual].definir_jugada(jugada)
         
     def terminar(self):
-        sys.exit(0)
         self.term = True
         
 
@@ -422,7 +421,7 @@ def main():
         
         if hilo.mesa.dibujar:
             if hilo.mesa.ronda_actual.tipo == 1:
-                
+                print 'xxx'                
                 jugador1.carta1.set_carta(hilo.mesa.jugadores[0].mano[0])
                 jugador1.carta2.set_carta(hilo.mesa.jugadores[0].mano[1])
                 jugador2.carta1.set_carta(hilo.mesa.jugadores[1].mano[0])
@@ -600,20 +599,20 @@ def main():
         
         '''Animaciones'''
         
-        if repartida_manos:
-            repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
-            if not repartida_manos:
-                flop = True
-        if flop:
-            flop = mesa.mostrar_flop('kd','kh','ks')
-            if not flop:
-                turn = True
-        if turn:
-            turn = mesa.mostrar_turn('kd')
-            if not turn:
-                river = True
-        if river:
-            river = mesa.mostrar_river('kd')
+#        if repartida_manos:
+#            repartida_manos = repartir_manos(repartida_manos, jugador1, jugador2, cartas_abiertas)
+#            if not repartida_manos:
+#                flop = True
+#        if flop:
+#            flop = mesa.mostrar_flop('kd','kh','ks')
+#            if not flop:
+#                turn = True
+#        if turn:
+#            turn = mesa.mostrar_turn('kd')
+#            if not turn:
+#                river = True
+#        if river:
+#            river = mesa.mostrar_river('kd')
         
         '''Actualizar Sprites'''
         

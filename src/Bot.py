@@ -20,7 +20,7 @@ class Bot(Jugador):
     El bot extiende de un jugador, redefine los métodos del mismo
     '''
     
-    def __init__(self, identificador, fichas, nombre, p = 0.5):
+    def __init__(self, identificador, fichas, nombre, p=0.5):
         '''
         Constructor del Bot
         '''
