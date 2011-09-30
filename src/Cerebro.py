@@ -124,12 +124,12 @@ class Cerebro(object):
             elif ronda.tipo == 2: #flop
                 if len(odd): #se tiene algo en los odds  
                     for i in odd:
-                        if odd[i][1] <= 5: 
-                            if odd[i][0] == 0:#se tiene un juego formado y es bueno
+                        if i[1] <= 5: 
+                            if i[0] == 0:#se tiene un juego formado y es bueno
                                 return 'apostar'
                             else:
-                                
-                                dif = ronda.apuesta_de_ronda() - odd[i][0] * ronda.monto_a_igualar(dealer)
+                                print (">>>>>>>> ",i[0])
+                                dif = ronda.apuesta_de_ronda() - i[0] * ronda.monto_a_igualar(dealer)
     
                                 if dif > 0:
 #                                    if ronda.monto_a_subir() > dif * 2:
@@ -144,19 +144,19 @@ class Cerebro(object):
                                 else:
                                     return "no_ir"
                         
-                        elif odd[i][1] == 6 or odd[i][1] == 7:#trío o escalera
-                            if odd[i][1] == 0:#se tiene ese juego
+                        elif i[1] == 6 or i[1] == 7:#trío o escalera
+                            if i[1] == 0:#se tiene ese juego
                                 if ronda.nro_apuesta <= 2:
                                     return "apostar"
                                 else:
                                     return "igualar"
                             else: #no se tiene ese juego
-                                dif = ronda.apuesta_de_ronda() - odd[i][0] * ronda.monto_a_igualar(dealer)
+                                dif = ronda.apuesta_de_ronda() - i[0] * ronda.monto_a_igualar(dealer)
                                 if (dif > 0):
                                     return "igualar"
                                 else:
                                     return "no_ir"
-                        elif odd[i][1] == 8:
+                        elif i[1] == 8:
                             if (mano[0][0] == mano[1][0]):#par en mano
                                 return "igualar"
                 return "no_ir"
@@ -165,12 +165,12 @@ class Cerebro(object):
                 
                 if len(odd): #se tiene algo en los odds  
                     for i in odd:
-                        if odd[i][1] <= 5: 
-                            if odd[i][0] == 0 and dict_odd[odd[i][2]][1]:#se tiene un juego formado y es bueno y lo que se tiene no esta en mesa
+                        if i[1] <= 5: 
+                            if i[0] == 0 and dict_odd[i[2]][1]:#se tiene un juego formado y es bueno y lo que se tiene no esta en mesa
                                 return 'apostar'
                             else:
                                 
-                                dif = ronda.apuesta_de_ronda() - odd[i][0] * ronda.monto_a_igualar(dealer)
+                                dif = ronda.apuesta_de_ronda() - i[0] * ronda.monto_a_igualar(dealer)
     
                                 if dif > 0:
                                     if ronda.nro_apuesta <= 2:   
@@ -181,19 +181,19 @@ class Cerebro(object):
                                 else:
                                     return "no_ir"
                         
-                        elif odd[i][1] == 6 or odd[i][1] == 7:#trío o escalera
-                            if odd[i][1] == 0 and dict_odd[odd[i][2]][1]:#se tiene ese juego
+                        elif i[1] == 6 or i[1] == 7:#trío o escalera
+                            if i[1] == 0 and dict_odd[i[2]][1]:#se tiene ese juego
                                 if ronda.nro_apuesta <= 2:
                                     return "apostar"
                                 else:
                                     return "igualar"
                             else: #no se tiene ese juego
-                                dif = ronda.apuesta_de_ronda() - odd[i][0] * ronda.monto_a_igualar(dealer)
+                                dif = ronda.apuesta_de_ronda() - i[0] * ronda.monto_a_igualar(dealer)
                                 if (dif > 0):
                                     return "igualar"
                                 else:
                                     return "no_ir"
-                        elif odd[i][1] == 8:
+                        elif i[1] == 8:
                             if (mano[0][0] == mano[1][0]):#par en mano
                                 return "igualar"
                 return "no_ir"
