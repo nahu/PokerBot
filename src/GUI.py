@@ -141,12 +141,12 @@ class JugadorGUI():
             py= HEIGHT/1.5 + 45
             self.credito_jug = Texto('Credito: ' + str(self.fichas), WIDTH-WIDTH/1.5, 475)
             self.apuesta_jug = Texto('Apuesta: ' + str("0"), WIDTH/2, 417)
-            self.ganador = Texto('Ganador!!  ' + str(" "), WIDTH/2, 417)
+            self.ganador = Texto('Ganador!!  ' + str(" "), WIDTH/2 -10, 397)
         elif self.posicion == "arriba":
             py= HEIGHT/6.5 - 15
             self.credito_jug = Texto('Credito: ' + str(self.fichas), WIDTH-WIDTH/1.5, 125)
             self.apuesta_jug = Texto('Apuesta: ' + str("0"), WIDTH/2, 175)
-            self.ganador = Texto('Ganador!!  ' + str(" "), WIDTH/2, 417)
+            self.ganador = Texto('Ganador!!  ' + str(" "), WIDTH/2 -10, 195)
     
         self.boton_retirar = Boton("retirar", px, py) 
         self.boton_pasar   = Boton("pasar", px, py+35)
@@ -256,7 +256,6 @@ class MesaGUI():
         repartida = False
         repartida = self.carta5.repartir(703, HEIGHT/2)
         if repartida:
-            print repartida
             self.carta5.flip()
             return False
         return True
@@ -463,6 +462,8 @@ def main():
     turn_terminado = False
     river = False
     river_terminado = False
+    dibujar_ganador1 = False
+    dibujar_ganador2 = False
     
     bandera = False
     while True:
@@ -484,24 +485,24 @@ def main():
                 if not repartida_manos:
                     repartida_manos = True
                     
-#                print ('j1.dibuBotones: ' , hilo.mesa.jugadores[0].dibujar_botones())
-#                print ('j1.carta1', hilo.mesa.jugadores[0].mano[0])
-#                print ('j1.carta2',hilo.mesa.jugadores[0].mano[1])                
-#                print ('j1.dealer :', hilo.mesa.jugadores[0].dealer)
-#                print ('j1.bot',hilo.mesa.jugadores[0].bot)
-#                print ('j1.fichas',hilo.mesa.jugadores[0].fichas)
-#                print ('j1.apuesta',hilo.mesa.jugadores[0].apuesta_actual)
-#                print '  '    
-#                print ('j2.dibuBotones: ' , hilo.mesa.jugadores[1].dibujar_botones())
-#                print ('j2.carta1', hilo.mesa.jugadores[1].mano[0])
-#                print ('j2.carta2',hilo.mesa.jugadores[1].mano[1])                
-#                print ('j2.dealer :', hilo.mesa.jugadores[1].dealer)
-#                print ('j2.bot',hilo.mesa.jugadores[1].bot)
-#                print ('j2.fichas',hilo.mesa.jugadores[1].fichas)
-#                print ('j2.apuesta',hilo.mesa.jugadores[1].apuesta_actual)
-#                print '  '
-#                print ('j1.nro apuesta', hilo.mesa.ronda_actual.nro_apuesta)
-#                print ('mesa bote: ', hilo.mesa.bote)
+                print ('j1.dibuBotones: ' , hilo.mesa.jugadores[0].dibujar_botones())
+                print ('j1.carta1', hilo.mesa.jugadores[0].mano[0])
+                print ('j1.carta2',hilo.mesa.jugadores[0].mano[1])                
+                print ('j1.dealer :', hilo.mesa.jugadores[0].dealer)
+                print ('j1.bot',hilo.mesa.jugadores[0].bot)
+                print ('j1.fichas',hilo.mesa.jugadores[0].fichas)
+                print ('j1.apuesta',hilo.mesa.jugadores[0].apuesta_actual)
+                print '  '    
+                print ('j2.dibuBotones: ' , hilo.mesa.jugadores[1].dibujar_botones())
+                print ('j2.carta1', hilo.mesa.jugadores[1].mano[0])
+                print ('j2.carta2',hilo.mesa.jugadores[1].mano[1])                
+                print ('j2.dealer :', hilo.mesa.jugadores[1].dealer)
+                print ('j2.bot',hilo.mesa.jugadores[1].bot)
+                print ('j2.fichas',hilo.mesa.jugadores[1].fichas)
+                print ('j2.apuesta',hilo.mesa.jugadores[1].apuesta_actual)
+                print '  '
+                print ('j1.nro apuesta', hilo.mesa.ronda_actual.nro_apuesta)
+                print ('mesa bote: ', hilo.mesa.bote)
                 
                 hilo.dibujado()
 
@@ -562,53 +563,28 @@ def main():
                 if not river:
                     river = True
                 
-                if hilo.mesa.resultado != None:
-                    if not hilo.mesa.resultado[0]:
-                        jugador1.cartas_al_maso()
-                        mesa.cartas_al_maso()
-                        repartida_manos = False
-                        flop = False
-                        turn = False
-                        river = False
-                
-                        
-                    
-                
                 hilo.dibujado()
-                # animacion flop -- solo una vez
-                # la carta de flop esta en hilo.mesa.comunitarias [0..2] estan las 3 primeras
-                # mostrar las cartas q esatan en hilo.mesa.jugadores[0].fichas y [1]
-                # .dealer si es true, el es dealer
-                # .bot es ia
-                # .apuesta_actual 
-                # .dibujar_botones() si es true, mostrar los 3 botones.. pasar/igualar apostar/subir retirar  
-                # mesa.bote es el pozo
-                # hilo.dibujado()
             
-            #    elif hilo.mesa.ronda_actual == 3:
-                # animacion turn -- solo una vez
-                # la carta de river esta en hilo.mesa.comunitarias [3]
-                # mostrar las cartas q esatan en hilo.mesa.jugadores[0].fichas y [1]
-                # .dealer si es true, el es dealer
-                # .bot es ia
-                # .apuesta_actual 
-                # .dibujar_botones() si es true, mostrar los 3 botones.. pasar/igualar apostar/subir retirar  
-                # mesa.bote es el pozo
-                # hilo.dibujado()
-                
-            #    elif hilo.mesa.ronda_actual == 4:
-                # animacion river -- solo una vez
-                # la carta de river esta en hilo.mesa.comunitarias [4] 
-                # mostrar las cartas q esatan en hilo.mesa.jugadores[0].fichas y [1]
-                # .dealer si es true, el es dealer
-                # .bot es ia
-                # .apuesta_actual 
-                # .dibujar_botones() si es true, mostrar los 3 botones.. pasar/igualar apostar/subir retirar  
-                # mesa.bote es el pozo
-                # hilo.dibujado()
-                
-        #        pass
-                
+            print hilo.mesa.resultado
+            if hilo.mesa.resultado != None:
+                if not hilo.mesa.resultado[0]:
+                    if hilo.mesa.resultado[1] == 0:
+                        jugador1.set_ganador(hilo.mesa.resultado[2])
+                        dibujar_ganador1 = True
+                    elif hilo.mesa.resultado[1] == 1:
+                        jugador2.set_ganador(hilo.mesa.resultado[2])
+                        dibujar_ganador2 = True
+                    elif hilo.mesa.resultado[1] == None:
+                        dibujar_ganador1 = True
+                        jugador2.set_ganador(hilo.mesa.resultado[2])
+                        
+                        #jugador1.cartas_al_maso()
+                        #jugador2.cartas_al_maso()
+                        #mesa.cartas_al_maso()
+                        #repartida_manos = False
+                        #flop = False
+                        #turn = False
+                        #river = False        
         if hilo.mesa.jugadores[0].dibujar_botones():
             borrar_botones(all_sprites, jugador1)
             all_sprites.add( jugador1.get_boton("apostar"),
@@ -625,7 +601,7 @@ def main():
         '''Fondo y Sprites Fijos'''
         
         screen.blit(background_image, (0, 0))
-                   
+           
         
         '''Eventos:'''
             
@@ -729,6 +705,12 @@ def main():
             river = mesa.mostrar_river()
             if not river:
                 river_terminado = True
+        
+        if dibujar_ganador1 and river_terminado:
+            all_sprites.add(jugador1.ganador)
+        if dibujar_ganador2 and river_terminado:
+            all_sprites.add(jugador2.ganador)
+            
 
         
         '''Actualizar Sprites'''
